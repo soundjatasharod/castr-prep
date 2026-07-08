@@ -158,6 +158,8 @@ input,select,textarea { font-family:inherit; }
 .avatar { width:34px; height:34px; border-radius:50%; background:var(--amber); color:var(--blue); display:flex; align-items:center; justify-content:center; font-family:Oswald,sans-serif; font-weight:700; font-size:16px; flex:none; }
 
 /* ── RESPONSIVE ── */
+.nav-ico { display:none; }   /* bottom-tab-bar icons: mobile only */
+
 @media (max-width: 900px) {
   .q-grid { grid-template-columns:1fr; min-height:0; }
   .q-left { border-right:none; border-bottom:1px solid var(--line); padding:22px 18px; }
@@ -173,6 +175,88 @@ input,select,textarea { font-family:inherit; }
   .pin-box { width:48px; height:56px; font-size:24px; }
   .nav-brand-title { font-size:12px; }
   .nav-chip { display:none; }
+}
+
+/* ─────────────────────────────────────────────
+   PHONE — student flow only (admin console stays desktop)
+   ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Top bar keeps brand + crew chip; the 4 nav links become a bottom tab bar */
+  .nav { height:56px; padding:0 14px; }
+  .nav-chip { display:flex; }
+  .nav-chip-name { font-size:12px; }
+  .nav-brand-sub { display:none; }
+
+  .nav-links {
+    position:fixed; left:0; right:0; bottom:0; z-index:40;
+    height:auto; gap:0;
+    padding:6px 0 calc(6px + env(safe-area-inset-bottom));
+    background:#fff; border-top:1px solid var(--line);
+    box-shadow:0 -8px 20px -14px rgba(35,48,58,0.45);
+    justify-content:space-around; align-items:stretch;
+  }
+  .nav-link {
+    flex:1; height:auto; flex-direction:column; gap:3px;
+    justify-content:center; padding:4px 2px;
+    font-size:10px; letter-spacing:0.02em; text-align:center;
+    color:var(--steel); border-bottom:none;
+  }
+  .nav-link.active { color:var(--blue); border-bottom:none; box-shadow:inset 0 2px 0 var(--amber); }
+  .nav-ico { display:block; }
+
+  /* clear the fixed bottom bar on nav screens */
+  .screen-pad { padding-bottom:86px; }
+
+  /* Question / feedback */
+  .q-left, .q-right { padding:18px 16px; }
+  .q-prompt-title { font-size:21px; }
+  .q-section-name { font-size:13px; }
+  .option-row { padding:15px 16px; }        /* keep ≥44px touch targets */
+  .option-text { font-size:16px; }
+  #btn-submit-answer { position:sticky; bottom:10px; z-index:5; box-shadow:0 -6px 16px -10px rgba(35,48,58,0.4); }
+
+  /* Reading passage — drop the nested inner scroll on a phone */
+  .rc-passage { max-height:none; overflow:visible; }
+
+  /* PIN — boxes flex so they never overflow small screens */
+  .pin-row { gap:10px; justify-content:center; }
+  .pin-box { flex:1; width:auto; min-width:0; max-width:66px; height:auto; aspect-ratio:0.82; font-size:26px; }
+  .pin-box.sm { max-width:60px; font-size:22px; }
+
+  /* Crew breaker panel — 3 breakers share one row */
+  .breaker-row { gap:10px; flex-wrap:nowrap; }
+  .breaker { flex:1 1 0; width:auto !important; min-width:0; padding:12px 8px 14px; }
+  .breaker-name { font-size:13px !important; }
+  .breaker-slot { width:44px !important; height:74px !important; }
+  .breaker-handle { width:36px !important; height:32px !important; }
+
+  /* My Progress — table rows reflow to cards (no horizontal scroll) */
+  .prog-wrap { overflow:visible; border:none !important; background:transparent !important; }
+  .prog-inner { min-width:0 !important; }
+  .prog-head { display:none !important; }
+  .prog-row {
+    display:grid !important;
+    grid-template-columns:1fr auto !important;
+    grid-template-areas:"sec acc" "done trend" !important;
+    gap:8px 12px; align-items:center;
+    background:#fff; border:1px solid var(--line);
+    padding:14px 16px !important;
+  }
+  .prog-row + .prog-row { margin-top:12px; }
+  .prog-sec { grid-area:sec; }
+  .prog-acc { grid-area:acc; text-align:right; }
+  .prog-done { grid-area:done; }
+  .prog-done .prog-bar { flex:1; width:auto !important; }
+  .prog-trend { grid-area:trend; text-align:right; }
+}
+
+@media (max-width: 400px) {
+  .q-left, .q-right, .screen-pad { padding-left:12px; padding-right:12px; }
+  .q-prompt-title { font-size:19px; }
+  .breaker-slot { width:38px !important; height:64px !important; }
+  .breaker-handle { width:30px !important; height:28px !important; }
+  .breaker-name { font-size:12px !important; }
+  .pin-box { font-size:23px; }
 }
 </style>
 </head>
