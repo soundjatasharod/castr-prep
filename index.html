@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAST-R Prep — Tools of the Trade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0A3D62;
+  --blue-dark: #082d48;
+  --amber: #F2A900;
+  --amber-dark: #d49400;
+  --copper: #B87333;
+  --steel: #4A5560;
+  --white: #F4F6F8;
+  --green: #2E7D46;
+  --dark: #23303A;
+  --border: #C3CCD3;
+  --bg: #F4F6F8;
+  --card-bg: #ffffff;
+  --text: #23303A;
+  --text-muted: #4A5560;
+  --radius: 6px;
+  --shadow: 0 2px 8px rgba(10,61,98,0.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'IBM Plex Sans',sans-serif;font-size:16px;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+#app{min-height:100vh;display:flex;flex-direction:column}
+
+/* BLUEPRINT GRID */
+.blueprint-bg {
+  background-color: var(--bg);
+  background-image: linear-gradient(rgba(10,61,98,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(10,61,98,.045) 1px,transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* TYPOGRAPHY */
+.oswald { font-family:'Oswald',sans-serif }
+.mono { font-family:'IBM Plex Mono',monospace }
+h1,h2,h3 { font-family:'Oswald',sans-serif; font-weight:600; letter-spacing:.02em }
+
+/* NAV */
+.nav {
+  background: var(--blue);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  height: 52px;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+.nav-logo { font-family:'Oswald',sans-serif; font-weight:700; font-size:1.1rem; color:#fff; letter-spacing:.05em; margin-right:auto; text-decoration:none; display:flex; align-items:center; gap:8px }
+.nav-logo svg { flex-shrink:0 }
+.nav-links { display:flex; gap:4px }
+.nav-link { background:none; border:none; color:rgba(255,255,255,.7); font-family:'IBM Plex Sans',sans-serif; font-size:.82rem; font-weight:500; padding:6px 10px; border-radius:4px; cursor:pointer; text-transform:uppercase; letter-spacing:.06em; transition:color .15s,background .15s }
+.nav-link:hover,.nav-link.active { color:#fff; background:rgba(255,255,255,.12) }
+.nav-link.active { color:var(--amber) }
+.nav-user { display:flex; align-items:center; gap:8px; margin-left:8px }
+.nav-crew-badge { background:var(--amber); color:var(--blue); font-family:'Oswald',sans-serif; font-weight:700; font-size:.7rem; letter-spacing:.08em; padding:3px 8px; border-radius:3px; text-transform:uppercase }
+.nav-name { color:rgba(255,255,255,.85); font-size:.82rem; font-weight:500 }
+
+/* TEST MODE BANNER */
+.test-banner { background:#7c3aed; color:#fff; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:.78rem; font-weight:600; padding:5px; letter-spacing:.1em }
+
+/* DIMENSION DIVIDER */
+.dim-divider { display:flex; align-items:center; gap:10px; margin: 12px 0 }
+.dim-divider::before,.dim-divider::after { content:''; flex:1; height:1px; background:var(--border) }
+.dim-divider::before { border-right:4px solid var(--border) }
+.dim-divider::after { border-left:4px solid var(--border) }
+.dim-divider span { font-family:'Oswald',sans-serif; font-size:.7rem; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; white-space:nowrap }
+
+/* CARD / NAMEPLATE */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  position: relative;
+}
+.card-rivet {
+  position:absolute; width:8px; height:8px; border-radius:50%;
+  background:var(--border); border:1px solid #b0bec5;
+}
+.card-rivet.tl{top:7px;left:7px} .card-rivet.tr{top:7px;right:7px}
+.card-rivet.bl{bottom:7px;left:7px} .card-rivet.br{bottom:7px;right:7px}
+
+/* BUTTONS */
+.btn-primary { display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--amber); color:var(--blue); font-family:'Oswald',sans-serif; font-weight:700; font-size:1rem; letter-spacing:.06em; padding:13px 28px; border:none; border-radius:4px; cursor:pointer; transition:background .15s; text-transform:uppercase; text-decoration:none; width:100% }
+.btn-primary:hover { background:var(--amber-dark) }
+.btn-primary:disabled { background:#ccc; color:#888; cursor:not-allowed }
+.btn-secondary { display:inline-flex; align-items:center; justify-content:center; gap:8px; background:transparent; color:var(--blue); font-family:'Oswald',sans-serif; font-weight:600; font-size:.9rem; letter-spacing:.06em; padding:11px 24px; border:2px solid var(--blue); border-radius:4px; cursor:pointer; transition:all .15s; text-transform:uppercase; text-decoration:none; width:100% }
+.btn-secondary:hover { background:var(--blue); color:#fff }
+.btn-ghost { background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:.85rem; text-decoration:underline; padding:6px 0; font-family:'IBM Plex Sans',sans-serif }
+.btn-ghost:hover { color:var(--dark) }
+.btn-inline { display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--amber); color:var(--blue); font-family:'Oswald',sans-serif; font-weight:700; font-size:.9rem; letter-spacing:.06em; padding:10px 22px; border:none; border-radius:4px; cursor:pointer; transition:background .15s; text-transform:uppercase }
+.btn-inline:hover { background:var(--amber-dark) }
+.btn-outline-inline { display:inline-flex; align-items:center; justify-content:center; gap:8px; background:transparent; color:var(--blue); font-family:'Oswald',sans-serif; font-weight:600; font-size:.9rem; letter-spacing:.06em; padding:9px 20px; border:2px solid var(--blue); border-radius:4px; cursor:pointer; transition:all .15s; text-transform:uppercase }
+.btn-outline-inline:hover { background:var(--blue); color:#fff }
+.btn-danger { background:#d32f2f; color:#fff; font-family:'Oswald',sans-serif; font-weight:700; font-size:.9rem; letter-spacing:.06em; padding:10px 20px; border:none; border-radius:4px; cursor:pointer; transition:background .15s; text-transform:uppercase }
+.btn-danger:hover { background:#b71c1c }
+
+/* FORMS */
+.field { display:flex; flex-direction:column; gap:5px }
+.field label { font-size:.78rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--steel) }
+.field input,.field select { border:1.5px solid var(--border); border-radius:4px; padding:10px 12px; font-size:1rem; font-family:'IBM Plex Sans',sans-serif; color:var(--dark); background:#fff; outline:none; transition:border-color .15s }
+.field input:focus,.field select:focus { border-color:var(--blue) }
+.field input::placeholder { color:#aab2ba }
+
+/* PIN INPUT */
+.pin-group { display:flex; gap:10px; justify-content:center }
+.pin-box { width:52px; height:60px; border:2px solid var(--border); border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:1.8rem; font-weight:600; text-align:center; color:var(--dark); background:#fff; outline:none; transition:border-color .15s; -moz-appearance:textfield }
+.pin-box::-webkit-inner-spin-button,.pin-box::-webkit-outer-spin-button{-webkit-appearance:none}
+.pin-box:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(10,61,98,.12) }
+.pin-box.filled { border-color:var(--blue) }
+
+/* SCREENS */
+.screen { flex:1; display:flex; flex-direction:column }
+.screen-content { flex:1; padding:20px 16px; max-width:480px; width:100%; margin:0 auto }
+.screen-content.wide { max-width:960px }
+.screen-content.full { max-width:100%; padding:16px }
+
+/* LANDING */
+.landing-wrap { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 16px }
+.landing-logo-area { text-align:center; margin-bottom:28px }
+.landing-logo-area h1 { font-family:'Oswald',sans-serif; font-size:2.2rem; font-weight:700; color:var(--blue); letter-spacing:.05em; text-transform:uppercase }
+.landing-logo-area .tagline { font-size:.85rem; color:var(--steel); letter-spacing:.1em; text-transform:uppercase; margin-top:4px; font-family:'IBM Plex Mono',monospace }
+.landing-card { max-width:400px; width:100% }
+.landing-form-row { display:flex; gap:12px }
+.landing-form-row .field { flex:1 }
+
+/* ONBOARDING */
+.onboard-wrap { min-height:100vh; display:flex; flex-direction:column; padding:0 }
+.onboard-top { background:var(--blue); color:#fff; padding:28px 20px 24px; text-align:center }
+.onboard-top h2 { font-family:'Oswald',sans-serif; font-size:1.6rem; font-weight:700; letter-spacing:.04em }
+.onboard-top p { font-size:.9rem; color:rgba(255,255,255,.75); margin-top:6px }
+.onboard-body { flex:1; padding:24px 16px; max-width:480px; margin:0 auto; width:100% }
+.step-indicator { display:flex; align-items:center; gap:8px; margin-bottom:20px }
+.step-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:.8rem; font-weight:600 }
+.step-dot.active { background:var(--amber); color:var(--blue) }
+.step-dot.done { background:var(--green); color:#fff }
+.step-dot.pending { background:var(--border); color:var(--steel) }
+.step-line { flex:1; height:2px; background:var(--border) }
+.step-line.done { background:var(--green) }
+
+/* BREAKER PANEL */
+.breaker-panel { background:#37474f; border-radius:8px; padding:16px 20px; border:3px solid #263238; box-shadow:inset 0 2px 8px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3) }
+.breaker-panel-header { text-align:center; font-family:'Oswald',sans-serif; font-size:.8rem; letter-spacing:.2em; color:#90a4ae; text-transform:uppercase; margin-bottom:16px }
+.breaker-list { display:flex; flex-direction:column; gap:10px }
+.breaker { display:flex; align-items:center; gap:14px; background:#263238; border-radius:6px; padding:10px 14px; cursor:pointer; border:2px solid transparent; transition:border-color .15s; user-select:none }
+.breaker:hover { border-color:#546e7a }
+.breaker.selected { border-color:var(--amber) }
+.breaker-switch-wrap { width:28px; height:54px; background:#1a2a32; border-radius:4px; border:1px solid #37474f; display:flex; align-items:flex-end; padding:3px; flex-shrink:0 }
+.breaker-switch { width:100%; height:24px; border-radius:3px; transition:all .2s; background:#546e7a }
+.breaker.selected .breaker-switch-wrap { align-items:flex-start }
+.breaker.selected .breaker-switch { background:var(--amber); box-shadow:0 0 8px rgba(242,169,0,.6) }
+.breaker-label { font-family:'Oswald',sans-serif; font-size:1rem; font-weight:600; color:#cfd8dc; letter-spacing:.04em }
+.breaker.selected .breaker-label { color:#fff }
+.breaker-indicator { width:8px; height:8px; border-radius:50%; margin-left:auto; background:#37474f; flex-shrink:0 }
+.breaker.selected .breaker-indicator { background:var(--amber); box-shadow:0 0 6px rgba(242,169,0,.8) }
+
+/* DASHBOARD */
+.dashboard-greeting { padding:20px 0 10px }
+.dashboard-greeting h2 { font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:700; color:var(--blue) }
+.dashboard-greeting .subtitle { font-size:.85rem; color:var(--steel); margin-top:2px }
+.sections-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0 }
+.section-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:8px; padding:16px 14px; cursor:pointer; transition:border-color .15s,box-shadow .15s; text-align:left }
+.section-card:hover { border-color:var(--blue); box-shadow:var(--shadow) }
+.section-card .sc-icon { font-size:1.4rem; margin-bottom:8px }
+.section-card .sc-label { font-family:'Oswald',sans-serif; font-size:.85rem; font-weight:600; color:var(--blue); letter-spacing:.05em; text-transform:uppercase; line-height:1.2 }
+.section-card .sc-progress { font-family:'IBM Plex Mono',monospace; font-size:1.1rem; font-weight:600; color:var(--dark); margin-top:6px }
+.section-card .sc-sub { font-size:.75rem; color:var(--steel); margin-top:2px }
+.progress-bar-wrap { height:5px; background:#e8edf1; border-radius:3px; margin-top:8px; overflow:hidden }
+.progress-bar-fill { height:100%; border-radius:3px; background:var(--amber); transition:width .3s }
+.progress-bar-fill.green { background:var(--green) }
+
+/* LEADERBOARD SNAPSHOT */
+.leaderboard-snap { background:var(--blue); border-radius:8px; padding:14px 16px; color:#fff; cursor:pointer; margin-top:4px }
+.leaderboard-snap h3 { font-family:'Oswald',sans-serif; font-size:.85rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.65); margin-bottom:10px }
+.lb-crews { display:flex; gap:8px }
+.lb-crew { flex:1; background:rgba(255,255,255,.1); border-radius:6px; padding:8px 10px; text-align:center }
+.lb-crew-name { font-family:'Oswald',sans-serif; font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:rgba(255,255,255,.7) }
+.lb-crew-score { font-family:'IBM Plex Mono',monospace; font-size:1.1rem; font-weight:600; color:#fff; margin-top:3px }
+.lb-crew.rank-1 .lb-crew-score { color:var(--amber) }
+.lb-crew .lb-crew-rank { font-size:.65rem; color:rgba(255,255,255,.5); margin-top:1px }
+.lb-tap-hint { font-size:.72rem; color:rgba(255,255,255,.5); text-align:center; margin-top:8px }
+
+/* QUESTION SCREEN */
+.question-screen { flex:1; display:flex; flex-direction:column }
+.question-header { background:var(--blue); padding:12px 16px; display:flex; align-items:center; gap:10px }
+.question-header .section-label { font-family:'Oswald',sans-serif; font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.7) }
+.question-header .q-number { font-family:'IBM Plex Mono',monospace; font-size:.85rem; color:var(--amber); margin-left:auto }
+.question-body { flex:1; padding:16px; overflow-y:auto }
+.drawing-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:16px; background:#fff; border:1px solid var(--border); border-radius:6px; padding:8px }
+.drawing-wrap svg { max-width:100%; height:auto; display:block; margin:0 auto }
+.rc-passage-box { background:#f9fafc; border:1px solid var(--border); border-radius:6px; padding:14px 16px; margin-bottom:16px; font-size:.9rem; line-height:1.7; color:var(--dark); max-height:200px; overflow-y:auto }
+.rc-passage-box h4 { font-family:'Oswald',sans-serif; font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--steel); margin-bottom:8px }
+.q-prompt { font-size:1.05rem; font-weight:600; color:var(--dark); line-height:1.5; margin-bottom:16px }
+.option-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px }
+.option-btn { display:flex; align-items:flex-start; gap:12px; background:#fff; border:2px solid var(--border); border-radius:6px; padding:13px 14px; cursor:pointer; text-align:left; font-size:.95rem; color:var(--dark); transition:border-color .15s,background .15s; width:100% }
+.option-btn:hover { border-color:var(--blue) }
+.option-btn.selected { border-color:var(--blue); background:#eef4fa }
+.option-letter { font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--blue); width:20px; flex-shrink:0; margin-top:1px }
+.option-btn.selected .option-letter { color:var(--amber) }
+.option-btn.correct { border-color:var(--green); background:#e8f5ec }
+.option-btn.correct .option-letter { color:var(--green) }
+.option-btn.incorrect { border-color:var(--copper); background:#fdf3e8 }
+.option-btn.incorrect .option-letter { color:var(--copper) }
+.question-actions { padding:0 16px 16px; display:flex; flex-direction:column; gap:8px }
+
+/* FEEDBACK */
+.feedback-result { padding:16px; border-radius:6px; margin-bottom:16px; display:flex; gap:12px; align-items:flex-start }
+.feedback-result.correct { background:#e8f5ec; border:1.5px solid var(--green) }
+.feedback-result.incorrect { background:#fdf3e8; border:1.5px solid var(--copper) }
+.feedback-icon { font-size:1.4rem; flex-shrink:0; margin-top:2px }
+.feedback-label { font-family:'Oswald',sans-serif; font-size:1rem; font-weight:700; letter-spacing:.05em }
+.feedback-result.correct .feedback-label { color:var(--green) }
+.feedback-result.incorrect .feedback-label { color:var(--copper) }
+.feedback-rationale { font-size:.9rem; color:var(--dark); margin-top:4px; line-height:1.5 }
+.flag-link-wrap { text-align:center; padding:4px 0 }
+
+/* SESSION SUMMARY */
+.summary-card { text-align:center; padding:32px 20px }
+.summary-big { font-family:'IBM Plex Mono',monospace; font-size:3rem; font-weight:600; color:var(--blue) }
+.summary-label { font-family:'Oswald',sans-serif; font-size:1rem; letter-spacing:.08em; color:var(--steel); text-transform:uppercase; margin-top:4px }
+.summary-accuracy { font-family:'IBM Plex Mono',monospace; font-size:1.3rem; color:var(--amber); margin-top:8px }
+
+/* PROGRESS */
+.progress-section-card { background:var(--card-bg); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:12px }
+.psc-header { display:flex; align-items:baseline; gap:10px; margin-bottom:10px }
+.psc-title { font-family:'Oswald',sans-serif; font-size:.9rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--blue) }
+.psc-count { font-family:'IBM Plex Mono',monospace; font-size:.8rem; color:var(--steel) }
+.psc-stats { display:flex; gap:16px }
+.psc-stat { text-align:center }
+.psc-stat .val { font-family:'IBM Plex Mono',monospace; font-size:1.2rem; font-weight:600; color:var(--dark) }
+.psc-stat .lbl { font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; color:var(--steel) }
+.concept-callout { background:#f0f7ff; border:1px solid #c8dff5; border-radius:6px; padding:10px 12px; margin-top:10px; font-size:.85rem }
+.concept-callout strong { color:var(--blue) }
+
+/* LEADERBOARD */
+.week-badge { display:inline-block; background:var(--blue); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:.75rem; padding:4px 12px; border-radius:3px; letter-spacing:.08em; margin-bottom:16px }
+.crew-lb-card { background:var(--card-bg); border:2px solid var(--border); border-radius:8px; padding:16px 18px; margin-bottom:12px; position:relative }
+.crew-lb-card.rank-1 { border-color:var(--amber) }
+.crew-lb-card.rank-1::before { content:'#1'; position:absolute; top:8px; right:10px; font-family:'IBM Plex Mono',monospace; font-size:.75rem; color:var(--amber); font-weight:600 }
+.crew-lb-rank-num { font-family:'IBM Plex Mono',monospace; font-size:2.5rem; font-weight:600; color:var(--blue); float:right; margin-top:-4px }
+.crew-lb-name { font-family:'Oswald',sans-serif; font-size:1.1rem; font-weight:700; color:var(--dark); letter-spacing:.04em }
+.crew-lb-score { font-family:'IBM Plex Mono',monospace; font-size:1.3rem; font-weight:600; color:var(--amber); margin-top:4px }
+.crew-lb-detail { display:flex; gap:10px; margin-top:8px; flex-wrap:wrap }
+.crew-lb-sec { font-size:.72rem; font-family:'IBM Plex Mono',monospace; color:var(--steel); background:#f4f6f8; padding:2px 6px; border-radius:3px }
+.lb-no-data { text-align:center; padding:32px; color:var(--steel); font-size:.9rem }
+.local-mode-banner { background:#fef3c7; border:1px solid #f59e0b; border-radius:6px; padding:10px 14px; font-size:.82rem; color:#92400e; margin-bottom:16px }
+
+/* SETTINGS */
+.settings-section { margin-bottom:20px }
+.settings-section h3 { font-family:'Oswald',sans-serif; font-size:.85rem; letter-spacing:.12em; text-transform:uppercase; color:var(--steel); margin-bottom:12px }
+.locked-field { background:#f4f6f8; border:1.5px solid var(--border); border-radius:4px; padding:10px 12px; font-size:1rem; color:var(--steel); display:flex; align-items:center; justify-content:space-between }
+.locked-field .lock-icon { font-size:.85rem; color:#aab2ba }
+
+/* ADMIN */
+.admin-kpi-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-bottom:20px }
+.kpi-card { background:var(--card-bg); border:1px solid var(--border); border-radius:6px; padding:12px 14px }
+.kpi-val { font-family:'IBM Plex Mono',monospace; font-size:1.6rem; font-weight:600; color:var(--blue) }
+.kpi-lbl { font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:var(--steel); margin-top:2px }
+.admin-section-title { font-family:'Oswald',sans-serif; font-size:.85rem; letter-spacing:.12em; text-transform:uppercase; color:var(--steel); margin:16px 0 8px; display:flex; align-items:center; gap:10px }
+.admin-table-wrap { overflow-x:auto; border-radius:6px; border:1px solid var(--border); margin-bottom:20px }
+table { width:100%; border-collapse:collapse; font-size:.82rem }
+thead { background:#f0f4f8 }
+th { font-family:'Oswald',sans-serif; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--steel); padding:10px 12px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; cursor:pointer; user-select:none }
+th:hover { color:var(--blue) }
+th .sort-arrow { margin-left:4px; opacity:.5 }
+td { padding:9px 12px; border-bottom:1px solid #edf0f4; vertical-align:middle }
+tr:last-child td { border-bottom:none }
+tbody tr:hover { background:#f8fafc }
+.editable-cell { cursor:pointer; border-bottom:1px dashed var(--border) }
+.editable-cell:hover { color:var(--blue) }
+.edit-input { font-family:'IBM Plex Mono',monospace; font-size:.82rem; border:1px solid var(--blue); border-radius:3px; padding:3px 6px; width:80px; outline:none }
+.flag-item { background:var(--card-bg); border:1px solid var(--border); border-radius:6px; padding:12px 14px; margin-bottom:8px }
+.flag-item-header { display:flex; gap:8px; align-items:baseline; margin-bottom:4px }
+.flag-qid { font-family:'IBM Plex Mono',monospace; font-size:.8rem; color:var(--blue); font-weight:600 }
+.flag-who { font-size:.78rem; color:var(--steel) }
+.flag-time { font-size:.72rem; color:var(--steel); margin-left:auto }
+.flag-reason { font-size:.85rem; color:var(--dark); font-style:italic }
+.filter-chips { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px }
+.chip { background:#f4f6f8; border:1.5px solid var(--border); border-radius:16px; padding:4px 12px; font-size:.78rem; cursor:pointer; font-family:'IBM Plex Sans',sans-serif; transition:all .15s; white-space:nowrap }
+.chip.active { background:var(--blue); color:#fff; border-color:var(--blue) }
+.toggle-wrap { display:flex; align-items:center; gap:12px }
+.toggle { position:relative; display:inline-block; width:46px; height:26px }
+.toggle input { opacity:0; width:0; height:0 }
+.toggle-slider { position:absolute; cursor:pointer; top:0;left:0;right:0;bottom:0; background:#ccc; border-radius:26px; transition:.3s }
+.toggle-slider:before { position:absolute; content:''; height:20px; width:20px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:.3s }
+input:checked + .toggle-slider { background:var(--amber) }
+input:checked + .toggle-slider:before { transform:translateX(20px) }
+.test-mode-indicator { background:#7c3aed; color:#fff; font-family:'IBM Plex Mono',monospace; font-size:.75rem; padding:4px 10px; border-radius:12px; margin-left:8px }
+.expanded-row { background:#f8fafc }
+.expanded-row td { padding:12px 16px }
+.student-detail-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px }
+.student-detail-item { background:#fff; border:1px solid var(--border); border-radius:6px; padding:10px }
+.student-detail-item .label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--steel) }
+.student-detail-item .val { font-family:'IBM Plex Mono',monospace; font-size:1.1rem; font-weight:600; color:var(--dark); margin-top:2px }
+.student-detail-item .sub { font-size:.72rem; color:var(--steel) }
+
+/* SPARKLINE */
+.sparkline-wrap { display:inline-flex; align-items:center; gap:4px }
+.sparkline-wrap svg { display:block }
+
+/* CREW COLORS */
+.crew-oakbrook { color:#0A3D62 }
+.crew-rockford { color:#B87333 }
+.crew-chicago { color:#2E7D46 }
+.crew-badge-oakbrook { background:#0A3D62; color:#fff }
+.crew-badge-rockford { background:#B87333; color:#fff }
+.crew-badge-chicago { background:#2E7D46; color:#fff }
+
+/* MISC */
+.page-title { font-family:'Oswald',sans-serif; font-size:1.4rem; font-weight:700; color:var(--blue); letter-spacing:.03em; margin-bottom:4px }
+.page-sub { font-size:.85rem; color:var(--steel); margin-bottom:16px }
+.loading { display:flex; align-items:center; justify-content:center; height:200px; color:var(--steel); font-family:'IBM Plex Mono',monospace; font-size:.85rem }
+.empty { text-align:center; padding:32px; color:var(--steel) }
+.notice { background:#fef3c7; border:1px solid #f59e0b; border-radius:6px; padding:12px 14px; font-size:.85rem; color:#92400e; margin-bottom:14px }
+.success-notice { background:#e8f5ec; border:1px solid var(--green); border-radius:6px; padding:12px 14px; font-size:.85rem; color:#1b5e20; margin-bottom:14px }
+.mono-num { font-family:'IBM Plex Mono',monospace }
+
+/* MODAL / OVERLAY */
+.overlay { position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,.5); z-index:200; display:flex; align-items:flex-end; justify-content:center }
+.overlay-panel { background:#fff; border-radius:12px 12px 0 0; padding:24px 20px 32px; width:100%; max-width:480px; max-height:80vh; overflow-y:auto }
+.overlay-panel h3 { font-family:'Oswald',sans-serif; font-size:1.1rem; font-weight:700; color:var(--blue); margin-bottom:12px }
+
+@media(min-width:640px){
+  .sections-grid{grid-template-columns:repeat(4,1fr)}
+  .landing-form-row{gap:16px}
+  .overlay{align-items:center}
+  .overlay-panel{border-radius:12px;max-width:440px}
+  .nav-link{font-size:.85rem;padding:8px 12px}
+}
+@media(max-width:400px){
+  .sections-grid{grid-template-columns:1fr 1fr}
+  .lb-crews{flex-direction:column}
+  .pin-box{width:44px;height:54px;font-size:1.5rem}
+}
+</style>
+</head>
+<body class="blueprint-bg">
+<div id="app"><div class="loading">Loading…</div></div>
+
+<!-- Firebase v9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+// ─────────────────────────────────────────────
+// SECTION 1: CONFIG
+// ─────────────────────────────────────────────
+// To enable multi-device shared leaderboard, replace the placeholder values
+// below with your Firebase project config from console.firebase.google.com
+// See SETUP.md for step-by-step instructions.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDEHlwt8hjODsqUUZaFBdDbGGk8ztmKaLo",
+  authDomain: "cast-r-prep.firebaseapp.com",
+  databaseURL: "https://cast-r-prep-default-rtdb.firebaseio.com",
+  projectId: "cast-r-prep",
+  storageBucket: "cast-r-prep.firebasestorage.app",
+  messagingSenderId: "355839344732",
+  appId: "1:355839344732:web:f74df0941c0d23fb3be699"
+};
+
+const LAUNCH_DATE_CDT_MS = Date.UTC(2026, 6, 9, 5, 0, 0); // July 9, 2026 midnight CDT (UTC-5)
+const CREWS = ['Oakbrook', 'Rockford', 'Chicago'];
+const ADMIN_KEY = 'soundjata_sharod';
+const ADMIN_PIN = '2468';
+const CONTACT_EMAIL = 'soundjatasharod@gmail.com';
+
+// ─────────────────────────────────────────────
+// SECTION 2: QUESTION DATA
+// ─────────────────────────────────────────────
+
+const GA_QUESTIONS = [
+  {id:'ga_q1',drawing:'shop_floor_layout',subskill:'missing_segment',masked:'tool_crib_width',maskedLetter:'B',
+   prompt:'What is the width of the Tool Crib?',
+   opts:[{l:'A',t:"56'",c:false},{l:'B',t:"60'",c:false},{l:'C',t:"72'",c:false},{l:'D',t:"88'",c:false},{l:'E',t:'None of the Above',c:true}],
+   rationale:"160 − 8 − 88 = 64, which isn't listed among A–D — the answer is E."},
+  {id:'ga_q2',drawing:'shop_floor_layout',subskill:'missing_segment',masked:'left_gap_break',maskedLetter:'A',
+   prompt:'What is the distance from the left edge of the building to the Break Room?',
+   opts:[{l:'A',t:"68'",c:false},{l:'B',t:"76'",c:false},{l:'C',t:"80'",c:true},{l:'D',t:"92'",c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"160 − 24 − 12 − 30 − 14 = 80"},
+  {id:'ga_q3',drawing:'shop_floor_layout',subskill:'missing_segment',masked:'right_remainder',maskedLetter:'C',
+   prompt:"What is the remaining segment on the right border below the Supervisor's Office?",
+   opts:[{l:'A',t:"44'",c:false},{l:'B',t:"50'",c:false},{l:'C',t:"54'",c:true},{l:'D',t:"64'",c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"96 − 14 − 18 − 10 = 54"},
+  {id:'ga_q4',drawing:'shop_floor_layout',subskill:'difference',masked:'parts_storage_width',maskedLetter:'D',
+   prompt:'By how much is the Parts Storage wider than the Break Room?',
+   opts:[{l:'A',t:"4'",c:false},{l:'B',t:"6'",c:true},{l:'C',t:"8'",c:false},{l:'D',t:"12'",c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"30 − 24 = 6"},
+  {id:'ga_q5',drawing:'shop_floor_layout',subskill:'area',masked:null,maskedLetter:null,
+   prompt:'What is the area of the Break Room?',
+   opts:[{l:'A',t:'400 sq ft',c:false},{l:'B',t:'440 sq ft',c:false},{l:'C',t:'480 sq ft',c:true},{l:'D',t:'520 sq ft',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"24 × 20 = 480"},
+  {id:'ga_q6',drawing:'shop_floor_layout',subskill:'area',masked:null,maskedLetter:null,
+   prompt:'What is the area of the Parts Storage room?',
+   opts:[{l:'A',t:'720 sq ft',c:false},{l:'B',t:'780 sq ft',c:true},{l:'C',t:'800 sq ft',c:false},{l:'D',t:'840 sq ft',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"30 × 26 = 780"},
+  {id:'ga_q7',drawing:'shop_floor_layout',subskill:'ratio',masked:null,maskedLetter:null,
+   prompt:'The total width of the building is how many times longer than the width of the Tool Crib?',
+   opts:[{l:'A',t:'2.0',c:false},{l:'B',t:'2.5',c:true},{l:'C',t:'3.0',c:false},{l:'D',t:'3.5',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"160 ÷ 64 = 2.5"},
+  {id:'ga_q8',drawing:'shop_floor_layout',subskill:'ratio',masked:null,maskedLetter:null,
+   prompt:"The total height of the building is how many times longer than the height of the Supervisor's Office?",
+   opts:[{l:'A',t:'4.33',c:false},{l:'B',t:'4.8',c:false},{l:'C',t:'5.0',c:false},{l:'D',t:'5.33',c:true},{l:'E',t:'None of the Above',c:false}],
+   rationale:"96 ÷ 18 = 5.33"},
+  {id:'ga_q9',drawing:'job_site_layout',subskill:'missing_segment',masked:'container_width',maskedLetter:'A',
+   prompt:'What is the width of the Storage Container?',
+   opts:[{l:'A',t:"53'",c:false},{l:'B',t:"58'",c:false},{l:'C',t:"60'",c:false},{l:'D',t:"75'",c:false},{l:'E',t:'None of the Above',c:true}],
+   rationale:"140 − 10 − 40 − 15 − 12 = 63, not listed among A–D — the answer is E."},
+  {id:'ga_q10',drawing:'job_site_layout',subskill:'missing_segment',masked:'gen_remainder',maskedLetter:'B',
+   prompt:'What is the remaining segment below the Generator Pad on the right border?',
+   opts:[{l:'A',t:"38'",c:false},{l:'B',t:"44'",c:false},{l:'C',t:"48'",c:true},{l:'D',t:"52'",c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"84 − 20 − 16 = 48"},
+  {id:'ga_q11',drawing:'job_site_layout',subskill:'difference',masked:'container_width',maskedLetter:'A',
+   prompt:'By how much is the Storage Container wider than the Trailer?',
+   opts:[{l:'A',t:"15'",c:false},{l:'B',t:"18'",c:false},{l:'C',t:"23'",c:true},{l:'D',t:"25'",c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"63 − 40 = 23"},
+  {id:'ga_q12',drawing:'job_site_layout',subskill:'area',masked:null,maskedLetter:null,
+   prompt:'What is the area of the Generator Pad?',
+   opts:[{l:'A',t:'260 sq ft',c:false},{l:'B',t:'275 sq ft',c:false},{l:'C',t:'288 sq ft',c:true},{l:'D',t:'300 sq ft',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"18 × 16 = 288"},
+  {id:'ga_q13',drawing:'job_site_layout',subskill:'area',masked:null,maskedLetter:null,
+   prompt:'What is the area of the Trailer?',
+   opts:[{l:'A',t:'880 sq ft',c:false},{l:'B',t:'920 sq ft',c:false},{l:'C',t:'940 sq ft',c:false},{l:'D',t:'1,000 sq ft',c:false},{l:'E',t:'None of the Above',c:true}],
+   rationale:"40 × 24 = 960, not listed among A–D — the answer is E."},
+  {id:'ga_q14',drawing:'job_site_layout',subskill:'ratio',masked:null,maskedLetter:null,
+   prompt:'The total width of the site is how many times longer than the width of the Trailer?',
+   opts:[{l:'A',t:'3.0',c:false},{l:'B',t:'3.25',c:false},{l:'C',t:'3.5',c:true},{l:'D',t:'3.75',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"140 ÷ 40 = 3.5"},
+  {id:'ga_q15',drawing:'job_site_layout',subskill:'ratio',masked:null,maskedLetter:null,
+   prompt:'The total height of the site is how many times longer than the height of the Generator Pad?',
+   opts:[{l:'A',t:'4.75',c:false},{l:'B',t:'5.0',c:false},{l:'C',t:'5.25',c:true},{l:'D',t:'5.5',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"84 ÷ 16 = 5.25"},
+  {id:'ga_q16',drawing:'job_site_layout',subskill:'multi_step',masked:null,maskedLetter:null,
+   prompt:'What is the combined area of the Trailer and the Generator Pad?',
+   opts:[{l:'A',t:'1,180 sq ft',c:false},{l:'B',t:'1,200 sq ft',c:false},{l:'C',t:'1,248 sq ft',c:true},{l:'D',t:'1,300 sq ft',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"960 + 288 = 1,248"},
+  {id:'ga_q17',drawing:'mounting_bracket',subskill:'missing_segment',masked:'hole2_to_hole3',maskedLetter:'A',
+   prompt:'What is the distance between the centers of Hole 2 and Hole 3?',
+   opts:[{l:'A',t:'8.5"',c:false},{l:'B',t:'9.5"',c:false},{l:'C',t:'10.5"',c:false},{l:'D',t:'11.0"',c:false},{l:'E',t:'None of the Above',c:true}],
+   rationale:"44 − 4 − 8.5 − 9 − 7.5 − 5 = 10.0, not listed among A–D — the answer is E."},
+  {id:'ga_q18',drawing:'mounting_bracket',subskill:'multi_step',masked:null,maskedLetter:null,
+   prompt:'What is the total distance from the center of Hole 1 to the center of Hole 5?',
+   opts:[{l:'A',t:'32.0"',c:false},{l:'B',t:'33.5"',c:false},{l:'C',t:'35.0"',c:true},{l:'D',t:'37.5"',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"8.5 + 10.0 + 9 + 7.5 = 35.0"},
+  {id:'ga_q19',drawing:'mounting_bracket',subskill:'multi_step',masked:null,maskedLetter:null,
+   prompt:'What is the distance from the center of Hole 2 to the center of Hole 4?',
+   opts:[{l:'A',t:'17.5"',c:false},{l:'B',t:'18.0"',c:false},{l:'C',t:'19.0"',c:true},{l:'D',t:'20.5"',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"10.0 + 9 = 19.0"},
+  {id:'ga_q20',drawing:'mounting_bracket',subskill:'difference',masked:null,maskedLetter:null,
+   prompt:'By how much is the Hole 3-to-Hole 4 spacing greater than the Hole 1-to-Hole 2 spacing?',
+   opts:[{l:'A',t:'0"',c:false},{l:'B',t:'0.5"',c:true},{l:'C',t:'1.0"',c:false},{l:'D',t:'1.5"',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"9 − 8.5 = 0.5"},
+  {id:'ga_q21',drawing:'mounting_bracket',subskill:'multi_step',masked:null,maskedLetter:null,
+   prompt:'What is the distance from the left edge of the bracket to the center of Hole 3?',
+   opts:[{l:'A',t:'20.5"',c:false},{l:'B',t:'21.5"',c:false},{l:'C',t:'22.5"',c:true},{l:'D',t:'24.0"',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"4 + 8.5 + 10.0 = 22.5"},
+  {id:'ga_q22',drawing:'mounting_bracket',subskill:'comparison',masked:null,maskedLetter:null,
+   prompt:'If a technician needs equal clearance on both ends of the bracket, which is closer to the edge — Hole 1 or Hole 5?',
+   opts:[{l:'A',t:'Hole 1 (4" from edge)',c:true},{l:'B',t:'Hole 5 (5" from edge)',c:false},{l:'C',t:'Equal distance',c:false},{l:'D',t:'Cannot be determined',c:false},{l:'E',t:'None of the Above',c:false}],
+   rationale:"Hole 1 is 4\" from its edge; Hole 5 is 5\" from its edge. 4 < 5."}
+];
+
+const MU_QUESTIONS = [
+  {id:'mu_q1',subskill:'unit_conversion',prompt:'How many inches are in 7 feet?',
+   opts:[{l:'A',t:'72',c:false},{l:'B',t:'78',c:false},{l:'C',t:'84',c:true},{l:'D',t:'96',c:false}],rationale:'7 × 12 = 84'},
+  {id:'mu_q2',subskill:'unit_conversion',prompt:'A pipe run is 3.5 yards long. How many feet is that?',
+   opts:[{l:'A',t:'9',c:false},{l:'B',t:'10.5',c:true},{l:'C',t:'12',c:false},{l:'D',t:'14',c:false}],rationale:'3.5 × 3 = 10.5'},
+  {id:'mu_q3',subskill:'unit_conversion',prompt:'5 gallons is equal to how many quarts?',
+   opts:[{l:'A',t:'10',c:false},{l:'B',t:'15',c:false},{l:'C',t:'20',c:true},{l:'D',t:'25',c:false}],rationale:'5 × 4 = 20'},
+  {id:'mu_q4',subskill:'unit_conversion',prompt:'A conduit weighs 4 pounds per foot. A 60-inch piece weighs how many pounds?',
+   opts:[{l:'A',t:'16',c:false},{l:'B',t:'20',c:true},{l:'C',t:'24',c:false},{l:'D',t:'30',c:false}],rationale:'60 ÷ 12 = 5 ft; 5 × 4 = 20 lbs'},
+  {id:'mu_q5',subskill:'unit_conversion',prompt:'A crew drinks 3 quarts of water each. There are 6 crew members. How many gallons total?',
+   opts:[{l:'A',t:'3.5',c:false},{l:'B',t:'4',c:false},{l:'C',t:'4.5',c:true},{l:'D',t:'5',c:false}],rationale:'6 × 3 = 18 quarts; 18 ÷ 4 = 4.5 gallons'},
+  {id:'mu_q6',subskill:'percentage_ratio',prompt:'A crew finishes 25% of a job in 4 days. At that rate, how many total days will the job take?',
+   opts:[{l:'A',t:'12',c:false},{l:'B',t:'14',c:false},{l:'C',t:'16',c:true},{l:'D',t:'20',c:false}],rationale:'4 days = 25%; total = 4 × 4 = 16 days'},
+  {id:'mu_q7',subskill:'percentage_ratio',prompt:'18 is what percent of 72?',
+   opts:[{l:'A',t:'20%',c:false},{l:'B',t:'25%',c:true},{l:'C',t:'30%',c:false},{l:'D',t:'40%',c:false}],rationale:'18 ÷ 72 = 0.25 = 25%'},
+  {id:'mu_q8',subskill:'percentage_ratio',prompt:'A $960 materials order is split 3:1 between electrical and plumbing. How much goes to electrical?',
+   opts:[{l:'A',t:'$240',c:false},{l:'B',t:'$480',c:false},{l:'C',t:'$640',c:false},{l:'D',t:'$720',c:true}],rationale:'Electrical = 3/4 × $960 = $720'},
+  {id:'mu_q9',subskill:'percentage_ratio',prompt:'A 50-foot run needs 15% extra for waste. How many total feet should be ordered?',
+   opts:[{l:'A',t:'55.5',c:false},{l:'B',t:'57.5',c:true},{l:'C',t:'60',c:false},{l:'D',t:'62.5',c:false}],rationale:'50 × 1.15 = 57.5 feet'},
+  {id:'mu_q10',subskill:'percentage_ratio',prompt:'A job is 40% complete after 6 days. How many more days remain at the same rate?',
+   opts:[{l:'A',t:'7',c:false},{l:'B',t:'8',c:false},{l:'C',t:'9',c:true},{l:'D',t:'10',c:false}],rationale:'6 days = 40%; total = 15 days; remaining = 15 − 6 = 9 days'},
+  {id:'mu_q11',subskill:'algebra',prompt:'Solve: 4x + 8 = 28',
+   opts:[{l:'A',t:'x = 4',c:false},{l:'B',t:'x = 5',c:true},{l:'C',t:'x = 6',c:false},{l:'D',t:'x = 7',c:false}],rationale:'4x = 20; x = 5'},
+  {id:'mu_q12',subskill:'algebra',prompt:'Wire costs $0.60 per foot. A crew orders $108 worth. How many feet did they order?',
+   opts:[{l:'A',t:'150',c:false},{l:'B',t:'170',c:false},{l:'C',t:'180',c:true},{l:'D',t:'200',c:false}],rationale:'108 ÷ 0.60 = 180 feet'},
+  {id:'mu_q13',subskill:'algebra',prompt:'Solve: 3x − 9 = 18',
+   opts:[{l:'A',t:'x = 7',c:false},{l:'B',t:'x = 8',c:false},{l:'C',t:'x = 9',c:true},{l:'D',t:'x = 10',c:false}],rationale:'3x = 27; x = 9'},
+  {id:'mu_q14',subskill:'algebra',prompt:'Six equal-length conduit sections total 42 feet. How long is each section?',
+   opts:[{l:'A',t:'6 ft',c:false},{l:'B',t:'7 ft',c:true},{l:'C',t:'8 ft',c:false},{l:'D',t:'9 ft',c:false}],rationale:'42 ÷ 6 = 7 feet'},
+  {id:'mu_q15',subskill:'algebra',prompt:'Solve: x/5 + 4 = 11',
+   opts:[{l:'A',t:'25',c:false},{l:'B',t:'30',c:false},{l:'C',t:'35',c:true},{l:'D',t:'40',c:false}],rationale:'x/5 = 7; x = 35'},
+  {id:'mu_q16',subskill:'arithmetic_word',prompt:'A crew installs 12 outlets per hour. A building needs 84 outlets. How many hours will it take?',
+   opts:[{l:'A',t:'5',c:false},{l:'B',t:'6',c:false},{l:'C',t:'7',c:true},{l:'D',t:'8',c:false}],rationale:'84 ÷ 12 = 7 hours'},
+  {id:'mu_q17',subskill:'arithmetic_word',prompt:'A truck can carry 3,000 lbs. Each transformer weighs 125 lbs. How many fit on one load?',
+   opts:[{l:'A',t:'20',c:false},{l:'B',t:'22',c:false},{l:'C',t:'24',c:true},{l:'D',t:'25',c:false}],rationale:'3,000 ÷ 125 = 24'},
+  {id:'mu_q18',subskill:'arithmetic_word',prompt:'4 workers each earn $28 per hour. After an 8-hour shift, what is the total labor cost?',
+   opts:[{l:'A',t:'$784',c:false},{l:'B',t:'$896',c:true},{l:'C',t:'$960',c:false},{l:'D',t:'$1,024',c:false}],rationale:'4 × $28 × 8 = $896'},
+  {id:'mu_q19',subskill:'arithmetic_word',prompt:'A site uses 3 gallons of paint per 400 sq ft. A wall is 1,200 sq ft. How many gallons are needed?',
+   opts:[{l:'A',t:'7',c:false},{l:'B',t:'8',c:false},{l:'C',t:'9',c:true},{l:'D',t:'10',c:false}],rationale:'1,200 ÷ 400 = 3 sections × 3 gallons = 9 gallons'},
+  {id:'mu_q20',subskill:'arithmetic_word',prompt:'A crew lays 75 ft of conduit per hour for 6 hours, then 50 ft/hr for 2 hours. Total feet laid?',
+   opts:[{l:'A',t:'500',c:false},{l:'B',t:'525',c:false},{l:'C',t:'550',c:true},{l:'D',t:'575',c:false}],rationale:'75×6=450; 50×2=100; 450+100=550'},
+  {id:'mu_q21',subskill:'arithmetic_word',prompt:'Materials cost $1,440 split equally among 4 job sites. Each site also adds $85 for local supplies. What does each site spend total?',
+   opts:[{l:'A',t:'$420',c:false},{l:'B',t:'$435',c:false},{l:'C',t:'$445',c:true},{l:'D',t:'$450',c:false}],rationale:'$1,440÷4=$360; $360+$85=$445'},
+  {id:'mu_q22',subskill:'geometry',prompt:'What is the perimeter of a rectangular work area 15 ft wide and 22 ft long?',
+   opts:[{l:'A',t:'70 ft',c:false},{l:'B',t:'74 ft',c:true},{l:'C',t:'80 ft',c:false},{l:'D',t:'84 ft',c:false}],rationale:'2×(15+22)=74 ft'},
+  {id:'mu_q23',subskill:'geometry',prompt:'A circular manhole cover has a radius of 14 inches. What is its area? (Use π ≈ 3.14)',
+   opts:[{l:'A',t:'528 sq in',c:false},{l:'B',t:'572 sq in',c:false},{l:'C',t:'616 sq in',c:true},{l:'D',t:'660 sq in',c:false}],rationale:'π × 14² ≈ 3.14 × 196 ≈ 616 sq in'},
+  {id:'mu_q24',subskill:'geometry',prompt:'A utility vault is 6 ft long, 4 ft wide, and 3 ft deep. What is its volume?',
+   opts:[{l:'A',t:'60 cu ft',c:false},{l:'B',t:'66 cu ft',c:false},{l:'C',t:'72 cu ft',c:true},{l:'D',t:'78 cu ft',c:false}],rationale:'6 × 4 × 3 = 72 cu ft'}
+];
+
+const MC_QUESTIONS = [
+  {id:'mc_q1',concept:'levers',prompt:'A worker uses a 36-inch pry bar with the fulcrum 4 inches from the load. Gripping at the far end versus gripping halfway down the bar — which grip requires less force?',opts:[{l:'A',t:'Gripping at the far end',c:true},{l:'B',t:'Gripping halfway down',c:false},{l:'C',t:'Both grips require equal force',c:false}],rationale:"Effort arm 32\" vs 14\": the longer effort arm needs less force."},
+  {id:'mc_q2',concept:'levers',prompt:'Two workers pry up identical crates with identical bars. Worker A sets the fulcrum closer to the crate than Worker B does. Who exerts less force?',opts:[{l:'A',t:'Worker A',c:true},{l:'B',t:'Worker B',c:false},{l:'C',t:'Both exert equal force',c:false}],rationale:'Fulcrum nearer the load shortens the load arm and lengthens the effort arm, reducing required force.'},
+  {id:'mc_q3',concept:'levers',prompt:'A wheelbarrow is loaded with bricks. Which placement makes it easier to lift the handles — bricks stacked near the wheel, or bricks stacked near the handles?',opts:[{l:'A',t:'Near the wheel',c:true},{l:'B',t:'Near the handles',c:false},{l:'C',t:'Both placements lift equally',c:false}],rationale:'The wheel is the fulcrum; moving the load closer to it shortens the load arm.'},
+  {id:'mc_q4',concept:'levers',prompt:'A 60-pound toolbox sits 6 feet from a beam\'s pivot. To balance it, how much weight must be placed 4 feet from the pivot on the other side?',opts:[{l:'A',t:'40 pounds',c:false},{l:'B',t:'90 pounds',c:true},{l:'C',t:'120 pounds',c:false}],rationale:'60 × 6 = 360; 360 ÷ 4 = 90 pounds.'},
+  {id:'mc_q5',concept:'levers',prompt:'Two claw hammers pull identical nails. Hammer A has a longer handle than Hammer B. Gripped at the end, which requires less force to pull the nail?',opts:[{l:'A',t:'Hammer A',c:true},{l:'B',t:'Hammer B',c:false},{l:'C',t:'Both require equal force',c:false}],rationale:'The longer handle is a longer effort arm around the hammer-head fulcrum.'},
+  {id:'mc_q6',concept:'pulleys',prompt:'Two rigs lift identical engine blocks. Rig A uses one movable pulley; Rig B uses one fixed pulley. Which requires less pulling force?',opts:[{l:'A',t:'Rig A',c:true},{l:'B',t:'Rig B',c:false},{l:'C',t:'Both require equal force',c:false}],rationale:'A movable pulley splits the load across two rope strands (MA=2); a fixed pulley just changes direction (MA=1).'},
+  {id:'mc_q7',concept:'pulleys',prompt:'A block-and-tackle with two supporting rope strands lifts a 120-pound motor. Ignoring friction, about how much pulling force is required?',opts:[{l:'A',t:'60 pounds',c:true},{l:'B',t:'120 pounds',c:false},{l:'C',t:'240 pounds',c:false}],rationale:'120 ÷ 2 supporting strands = 60 pounds.'},
+  {id:'mc_q8',concept:'pulleys',prompt:'A rigger adds more supporting rope strands to a hoist. What happens to the force needed to lift the same load?',opts:[{l:'A',t:'It decreases',c:true},{l:'B',t:'It increases',c:false},{l:'C',t:'It stays the same',c:false}],rationale:'Force = load ÷ number of supporting strands.'},
+  {id:'mc_q9',concept:'pulleys',prompt:'A single fixed pulley at the top of a pole lets a worker pull down to raise a bucket. Compared with hauling the bucket straight up by hand, the required force is:',opts:[{l:'A',t:'Less',c:false},{l:'B',t:'The same',c:true},{l:'C',t:'Greater',c:false}],rationale:'One fixed pulley redirects the pull but the tension still equals the full load.'},
+  {id:'mc_q10',concept:'pulleys',prompt:'Three hoists lift the same crate: one supporting strand, two strands, and four strands. Which lifts with the least effort?',opts:[{l:'A',t:'One strand',c:false},{l:'B',t:'Two strands',c:false},{l:'C',t:'Four strands',c:true}],rationale:'Load ÷ 4 is the smallest required force.'},
+  {id:'mc_q11',concept:'gears',prompt:'Two gears mesh directly. If the left gear turns clockwise, the right gear turns:',opts:[{l:'A',t:'Clockwise',c:false},{l:'B',t:'Counterclockwise',c:true},{l:'C',t:'It alternates',c:false}],rationale:'Direct meshing reverses rotation.'},
+  {id:'mc_q12',concept:'gears',prompt:'Three gears mesh in a row. If the first gear spins clockwise, which way does the third gear spin?',opts:[{l:'A',t:'Clockwise',c:true},{l:'B',t:'Counterclockwise',c:false},{l:'C',t:'It depends on gear size',c:false}],rationale:'Each mesh reverses direction: CW → CCW → CW. Two reversals return to clockwise.'},
+  {id:'mc_q13',concept:'gears',prompt:'A 12-tooth gear drives a 36-tooth gear. For every turn of the large gear, the small gear turns:',opts:[{l:'A',t:'3 times',c:true},{l:'B',t:'1/3 of a turn',c:false},{l:'C',t:'36 times',c:false}],rationale:'36 ÷ 12 = 3 small-gear turns per large-gear turn.'},
+  {id:'mc_q14',concept:'gears',prompt:'In a gear train with small, medium, and large meshed gears, which spins fastest?',opts:[{l:'A',t:'The small gear',c:true},{l:'B',t:'The medium gear',c:false},{l:'C',t:'The large gear',c:false}],rationale:'Angular speed is inversely proportional to size/tooth count in meshed gears.'},
+  {id:'mc_q15',concept:'gears',prompt:'Two wheels are connected by a straight (uncrossed) drive belt. If one turns clockwise, the other turns:',opts:[{l:'A',t:'Clockwise',c:true},{l:'B',t:'Counterclockwise',c:false},{l:'C',t:'It alternates',c:false}],rationale:'A belt carries motion without reversing it — unlike meshed teeth.'},
+  {id:'mc_q16',concept:'incline_planes',prompt:'Two ramps reach the same truck bed: one 12 feet long, one 6 feet long. Which requires less force to roll a drum up?',opts:[{l:'A',t:'The 12-foot ramp',c:true},{l:'B',t:'The 6-foot ramp',c:false},{l:'C',t:'Both require equal force',c:false}],rationale:'Same rise over more run = shallower angle = less force (over more distance).'},
+  {id:'mc_q17',concept:'incline_planes',prompt:'Two loading-dock ramps rise to the same platform. Ramp A is steeper than Ramp B. Pushing identical carts up, which ramp requires more force?',opts:[{l:'A',t:'Ramp A',c:true},{l:'B',t:'Ramp B',c:false},{l:'C',t:'Both require equal force',c:false}],rationale:'Force scales with the sine of the incline angle.'},
+  {id:'mc_q18',concept:'incline_planes',prompt:'A ramp is replaced with one twice as long reaching the same height. Ignoring friction, the force needed to push a load up becomes:',opts:[{l:'A',t:'Half as much',c:true},{l:'B',t:'Twice as much',c:false},{l:'C',t:'Unchanged',c:false}],rationale:'F = W×h/L: doubling L halves F.'},
+  {id:'mc_q19',concept:'incline_planes',prompt:'Compared with lifting a barrel straight up onto a platform, rolling it up a ramp to the same platform requires:',opts:[{l:'A',t:'Less force over a longer distance',c:true},{l:'B',t:'More force over a shorter distance',c:false},{l:'C',t:'The same force either way',c:false}],rationale:'The incline spreads the same work over more distance, lowering the force.'},
+  {id:'mc_q20',concept:'friction',prompt:'A loaded pallet is dragged first across gravel, then across a smooth steel plate. On which surface is it easier to drag?',opts:[{l:'A',t:'The steel plate',c:true},{l:'B',t:'The gravel',c:false},{l:'C',t:'Equally easy on both',c:false}],rationale:'Smoother surface = lower coefficient of friction = less drag force.'},
+  {id:'mc_q21',concept:'friction',prompt:'Sand is scattered on a smooth floor where a crate is being slid. Sliding the crate becomes:',opts:[{l:'A',t:'Harder',c:true},{l:'B',t:'Easier',c:false},{l:'C',t:'No different',c:false}],rationale:'The sand raises the effective roughness between crate and floor.'},
+  {id:'mc_q22',concept:'friction',prompt:'A heavy cabinet can be slid across the floor or moved on rolling dollies. Which requires less force?',opts:[{l:'A',t:'Rolling on dollies',c:true},{l:'B',t:'Sliding it',c:false},{l:'C',t:'Both require equal force',c:false}],rationale:'Rolling resistance is much smaller than sliding friction for the same load.'},
+  {id:'mc_q23',concept:'friction',prompt:'For standing on while working, which surface gives a boot more grip: wet ice or a dry rubber mat?',opts:[{l:'A',t:'The dry rubber mat',c:true},{l:'B',t:'The wet ice',c:false},{l:'C',t:'Both grip equally',c:false}],rationale:'Rubber on dry surface has a far higher friction coefficient than wet ice.'},
+  {id:'mc_q24',concept:'momentum',prompt:'A fully loaded dump truck and an empty pickup travel at the same speed. Which takes more braking effort to stop?',opts:[{l:'A',t:'The dump truck',c:true},{l:'B',t:'The pickup',c:false},{l:'C',t:'Both stop equally easily',c:false}],rationale:'Same speed, far more mass — far more momentum to remove.'},
+  {id:'mc_q25',concept:'momentum',prompt:'Two carts collide head-on at the same speed. Cart A weighs twice as much as Cart B. After the collision, the tangled carts move:',opts:[{l:'A',t:"In Cart A's original direction",c:true},{l:'B',t:"In Cart B's original direction",c:false},{l:'C',t:'They stop dead',c:false}],rationale:"A's momentum (2m×v) exceeds B's (m×v), so the combined pair keeps A's direction."},
+  {id:'mc_q26',concept:'momentum',prompt:'Which has more momentum: a 2-ton truck at 30 mph or a 1-ton car at 50 mph?',opts:[{l:'A',t:'The truck',c:true},{l:'B',t:'The car',c:false},{l:'C',t:"They're equal",c:false}],rationale:'2×30=60 vs 1×50=50 — the truck has more.'},
+  {id:'mc_q27',concept:'center_of_mass',prompt:'Two workers carry a long ladder with a paint bucket hung from it, closer to Worker B\'s end. Who supports more weight?',opts:[{l:'A',t:'Worker B',c:true},{l:'B',t:'Worker A',c:false},{l:'C',t:'Both support it equally',c:false}],rationale:'Load distribution is inversely proportional to distance — the nearer carrier takes the larger share.'},
+  {id:'mc_q28',concept:'center_of_mass',prompt:'Two identical shelving units hold the same boxes: one loaded top-heavy, one loaded bottom-heavy. Which tips over more easily if bumped?',opts:[{l:'A',t:'The top-heavy unit',c:true},{l:'B',t:'The bottom-heavy unit',c:false},{l:'C',t:'Both tip equally easily',c:false}],rationale:'Raising the center of gravity reduces the tilt angle needed to pass the tipping point.'},
+  {id:'mc_q29',concept:'center_of_mass',prompt:'To carry a long uniform pipe one-handed with no tipping, a worker should grip it:',opts:[{l:'A',t:'At its middle',c:true},{l:'B',t:'Near one end',c:false},{l:'C',t:"Anywhere — it won't tip",c:false}],rationale:"A uniform pipe's center of gravity is at its midpoint; support there balances the torques."},
+  {id:'mc_q30',concept:'gas_pressure',prompt:'The same amount of compressed air is stored first in a large tank, then transferred entirely into a smaller tank at the same temperature. In the smaller tank the pressure is:',opts:[{l:'A',t:'Higher',c:true},{l:'B',t:'Lower',c:false},{l:'C',t:'The same',c:false}],rationale:'P ∝ 1/V for a fixed amount of gas at constant temperature.'},
+  {id:'mc_q31',concept:'gas_pressure',prompt:'A sealed cylinder of air is heated. The pressure inside:',opts:[{l:'A',t:'Increases',c:true},{l:'B',t:'Decreases',c:false},{l:'C',t:'Stays the same',c:false}],rationale:"P ∝ T at constant volume (Gay-Lussac's law)."},
+  {id:'mc_q32',concept:'gas_pressure',prompt:'Half the air is released from a rigid tank at constant temperature. The tank\'s pressure becomes:',opts:[{l:'A',t:'About half of what it was',c:true},{l:'B',t:'About double',c:false},{l:'C',t:'Unchanged',c:false}],rationale:'Pressure is proportional to the amount of gas in a fixed volume at fixed temperature.'},
+  {id:'mc_q33',concept:'pistons',prompt:'Fuel vapor ignites in a cylinder beneath a piston. The piston is pushed:',opts:[{l:'A',t:'Away from the burning gas',c:true},{l:'B',t:'Toward the burning gas',c:false},{l:'C',t:"It doesn't move",c:false}],rationale:'Combustion spikes the gas pressure, which forces the piston outward.'},
+  {id:'mc_q34',concept:'pistons',prompt:'A piston rapidly compresses the air in a sealed cylinder. The trapped air becomes:',opts:[{l:'A',t:'Hotter and higher pressure',c:true},{l:'B',t:'Cooler and lower pressure',c:false},{l:'C',t:'Unchanged',c:false}],rationale:'Work done on the gas raises its internal energy — pressure and temperature both climb.'},
+  {id:'mc_q35',concept:'pistons',prompt:'In a hydraulic jack, pushing down the small piston makes the large piston:',opts:[{l:'A',t:'Rise with greater force',c:true},{l:'B',t:'Rise with less force',c:false},{l:'C',t:'Stay still',c:false}],rationale:'Equal pressure × larger area = larger force (moving a shorter distance).'},
+  {id:'mc_q36',concept:'fluid_dynamics',prompt:'Water flows through a pipe that narrows midway. In the narrow section, the water moves:',opts:[{l:'A',t:'Faster',c:true},{l:'B',t:'Slower',c:false},{l:'C',t:'At the same speed',c:false}],rationale:'Flow rate (area × velocity) is constant, so smaller area means higher velocity.'},
+  {id:'mc_q37',concept:'fluid_dynamics',prompt:'The same volume of water per second passes through a wide section and a narrow section of one pipe. Where is the water slowest?',opts:[{l:'A',t:'The wide section',c:true},{l:'B',t:'The narrow section',c:false},{l:'C',t:'Equal speed in both',c:false}],rationale:'Velocity = flow rate ÷ area: bigger area, slower water.'},
+  {id:'mc_q38',concept:'fluid_dynamics',prompt:'Pressing a thumb over the end of a garden hose makes the water stream:',opts:[{l:'A',t:'Faster',c:true},{l:'B',t:'Slower',c:false},{l:'C',t:'Unchanged',c:false}],rationale:'The same flow forced through a smaller opening exits at higher speed.'},
+  {id:'mc_q39',concept:'fluid_dynamics',prompt:'Two identical full tanks drain through bottom holes; one hole is wider. Which tank empties first?',opts:[{l:'A',t:'The one with the wider hole',c:true},{l:'B',t:'The one with the narrower hole',c:false},{l:'C',t:'Both empty together',c:false}],rationale:'Volume flow scales with outlet area for a similar outflow speed.'},
+  {id:'mc_q40',concept:'buoyancy',prompt:'The same sealed crate is floated in seawater and in fresh water. In which does it float higher?',opts:[{l:'A',t:'Seawater',c:true},{l:'B',t:'Fresh water',c:false},{l:'C',t:'Equally in both',c:false}],rationale:"Seawater is denser, so less displaced volume supports the crate's weight."},
+  {id:'mc_q41',concept:'buoyancy',prompt:'A cork ball and a solid steel ball of the same size are dropped into water. Which floats?',opts:[{l:'A',t:'The cork ball',c:true},{l:'B',t:'The steel ball',c:false},{l:'C',t:'Both float',c:false}],rationale:'Cork is less dense than water; steel is denser and sinks.'},
+  {id:'mc_q42',concept:'buoyancy',prompt:'As cargo is loaded onto a barge, the barge:',opts:[{l:'A',t:'Sits lower in the water',c:true},{l:'B',t:'Rises higher',c:false},{l:'C',t:'Stays at the same level',c:false}],rationale:'More weight needs more buoyant force, which needs more displaced water.'},
+  {id:'mc_q43',concept:'buoyancy',prompt:'A solid object is denser than water. Placed in a tank, it will:',opts:[{l:'A',t:'Sink',c:true},{l:'B',t:'Float',c:false},{l:'C',t:'Hover mid-depth',c:false}],rationale:'Its weight exceeds the maximum buoyant force available at full submersion.'},
+  {id:'mc_q44',concept:'water_pressure',prompt:'Two full tanks: one 20 feet deep, one 10 feet deep. At which tank\'s bottom is the water pressure greater?',opts:[{l:'A',t:'The 20-foot tank',c:true},{l:'B',t:'The 10-foot tank',c:false},{l:'C',t:'Equal at both bottoms',c:false}],rationale:'Pressure is proportional to depth of water above the point.'},
+  {id:'mc_q45',concept:'water_pressure',prompt:'Two identical water tanks feed identical hoses at ground level. Tank A sits on a taller stand than Tank B. Which hose has greater water pressure?',opts:[{l:'A',t:"Tank A's hose",c:true},{l:'B',t:"Tank B's hose",c:false},{l:'C',t:'Both are equal',c:false}],rationale:'Outlet pressure scales with the height of the water column above the outlet.'},
+  {id:'mc_q46',concept:'water_pressure',prompt:'A barrel full of water has two small holes: one near the top, one near the bottom. Which hole\'s stream shoots out farther?',opts:[{l:'A',t:'The bottom hole',c:true},{l:'B',t:'The top hole',c:false},{l:'C',t:'Both shoot equally far',c:false}],rationale:'More water above the bottom hole means higher pressure and a faster exit stream.'},
+  {id:'mc_q47',concept:'circuits',prompt:'Two switches are wired in series with a bulb. For the bulb to light:',opts:[{l:'A',t:'Both switches must be closed',c:true},{l:'B',t:'Either switch alone can light it',c:false},{l:'C',t:'Neither needs to be closed',c:false}],rationale:'Series devices share one path — any open switch breaks it.'},
+  {id:'mc_q48',concept:'circuits',prompt:'Two switches are wired in parallel with a bulb. The bulb lights when:',opts:[{l:'A',t:'Either switch is closed',c:true},{l:'B',t:'Both must be closed',c:false},{l:'C',t:'Only if both are open',c:false}],rationale:'Parallel paths are independent — one closed path is enough.'},
+  {id:'mc_q49',concept:'circuits',prompt:'A string of work lights is wired in series. If one lamp\'s filament breaks, the other lamps:',opts:[{l:'A',t:'All go dark',c:true},{l:'B',t:'Stay lit',c:false},{l:'C',t:'Get brighter',c:false}],rationale:'The break opens the only current path for the whole loop.'},
+  {id:'mc_q50',concept:'circuits',prompt:'A panel has one master switch on the supply line and separate branch switches for each tool. Which switch de-energizes every tool at once?',opts:[{l:'A',t:'The master switch',c:true},{l:'B',t:'Any branch switch',c:false},{l:'C',t:'No single switch can',c:false}],rationale:'Everything downstream depends on the main line; branches only control their own tool.'},
+  {id:'mc_q51',concept:'circuits',prompt:'A fuse in a circuit blows. Current in that circuit:',opts:[{l:'A',t:'Stops',c:true},{l:'B',t:'Doubles',c:false},{l:'C',t:'Continues unchanged',c:false}],rationale:'A blown fuse is an open — it breaks the conducting path on purpose.'},
+  {id:'mc_q52',concept:'rotational_motion',prompt:'On a spinning flywheel, one mark sits at the rim and one halfway to the center. In one rotation, which mark travels the greater distance?',opts:[{l:'A',t:'The rim mark',c:true},{l:'B',t:'The halfway mark',c:false},{l:'C',t:'Both travel the same distance',c:false}],rationale:'Circumference scales with radius — the rim traces the bigger circle.'},
+  {id:'mc_q53',concept:'rotational_motion',prompt:'Two carts have different wheel sizes. Per single wheel revolution, which cart moves farther: the one with larger wheels or smaller wheels?',opts:[{l:'A',t:'Larger wheels',c:true},{l:'B',t:'Smaller wheels',c:false},{l:'C',t:'Both move the same',c:false}],rationale:'One revolution covers one circumference, and larger wheels have larger circumference.'},
+  {id:'mc_q54',concept:'rotational_motion',prompt:'Two points on the same spinning shaft — one near the center, one at the edge — complete each full rotation:',opts:[{l:'A',t:'In the same amount of time',c:true},{l:'B',t:'Edge point takes longer',c:false},{l:'C',t:'Center point takes longer',c:false}],rationale:'Every point on a rigid rotating body shares the same rotation period; only linear speed differs.'},
+  {id:'mc_q55',concept:'projectile_motion',prompt:'A bolt is tossed upward in an arc across a trench. At what point in its flight is it moving slowest?',opts:[{l:'A',t:'At the top of the arc',c:true},{l:'B',t:'Just after leaving the hand',c:false},{l:'C',t:'Just before landing',c:false}],rationale:"Vertical velocity is zero at the peak, leaving only the horizontal component."},
+  {id:'mc_q56',concept:'projectile_motion',prompt:'A wrench slips from a scaffold. As it falls, its speed:',opts:[{l:'A',t:'Increases',c:true},{l:'B',t:'Decreases',c:false},{l:'C',t:'Stays constant',c:false}],rationale:'Gravity accelerates it continuously at ~32 ft/s² (ignoring air resistance).'},
+  {id:'mc_q57',concept:'springs',prompt:'Identical spring launchers are compressed 2 inches and 4 inches. Which sends an identical part farther?',opts:[{l:'A',t:'The 4-inch compression',c:true},{l:'B',t:'The 2-inch compression',c:false},{l:'C',t:'Both launch equally far',c:false}],rationale:'Restoring force and stored energy grow with compression distance (F = kx).'},
+  {id:'mc_q58',concept:'springs',prompt:'A stiff spring and a soft spring are compressed the same distance. Which pushes back harder?',opts:[{l:'A',t:'The stiff spring',c:true},{l:'B',t:'The soft spring',c:false},{l:'C',t:'Both push equally',c:false}],rationale:'F = kx: at equal x, larger k gives larger force.'},
+  {id:'mc_q59',concept:'vehicle_stability',prompt:'A forklift rounds a corner carrying a pallet. Is it more stable with the pallet raised high or kept low?',opts:[{l:'A',t:'Kept low',c:true},{l:'B',t:'Raised high',c:false},{l:'C',t:'Height makes no difference',c:false}],rationale:'A high load raises the center of gravity, making tip-over far easier in a turn.'},
+  {id:'mc_q60',concept:'vehicle_stability',prompt:'Two flatbeds carry equal weight: one stacked tall in a single column, one spread low across the bed. Which is less likely to tip on a sharp curve?',opts:[{l:'A',t:'The spread-low load',c:true},{l:'B',t:'The tall-stacked load',c:false},{l:'C',t:'Both are equally stable',c:false}],rationale:'Spreading the load low keeps the center of gravity down and inside the wheelbase.'}
+];
+
+const RC_PASSAGES = {
+  rc_p1:{title:'Lockout/Tagout',text:'Before servicing electrical equipment, workers follow a procedure called lockout/tagout. The purpose of lockout/tagout is to prevent machines from starting unexpectedly while someone is working on them. First, the worker shuts the equipment down and disconnects it from its energy source. Next, the worker places a personal lock on the energy-isolating device so it cannot be switched back on. A tag is attached to the lock identifying who placed it and why. Only the worker who placed the lock is permitted to remove it. This rule exists because the person who placed the lock is the one whose safety depends on the equipment staying off. Skipping any step of the procedure, even to save time, is considered a serious safety violation.'},
+  rc_p2:{title:'How Transformers Work',text:'A transformer changes the voltage of alternating current electricity. It contains two coils of wire, called the primary and secondary coils, wound around a shared iron core. Electricity entering the primary coil creates a changing magnetic field in the core. That magnetic field induces a current in the secondary coil, even though the two coils are not physically connected. If the secondary coil has more turns of wire than the primary, the voltage is increased. This is called a step-up transformer. If the secondary coil has fewer turns, the voltage is decreased, which is called a step-down transformer. Utilities use step-up transformers to raise voltage for efficient long-distance transmission, and step-down transformers near homes and businesses to lower it to safe, usable levels.'},
+  rc_p3:{title:'Personal Protective Equipment',text:'Personal protective equipment, or PPE, is the last line of defense against jobsite hazards. Employers are required to first try to eliminate or reduce hazards through equipment design and safe work procedures. PPE protects a worker when a hazard cannot be fully removed. Different hazards call for different equipment: hard hats protect against falling objects, safety glasses shield the eyes from flying debris, hearing protection guards against loud machinery, and insulated gloves protect electrical workers from shock. PPE only works when it fits properly and is worn consistently. A hard hat left in the truck protects no one. Workers are expected to inspect their equipment before each use and replace anything cracked, torn, or worn out.'},
+  rc_p4:{title:'Lewis Latimer',text:'Lewis Latimer was born in Massachusetts in 1848, the son of parents who had escaped slavery. He taught himself mechanical drawing while working at a patent law office, where his skill earned him a promotion from office boy to draftsman. In 1876, Alexander Graham Bell hired Latimer to draft the drawings for his telephone patent application. Latimer later joined the electric lighting industry, where he patented an improved process for making carbon filaments in 1882. His filaments made electric light bulbs longer-lasting and more affordable than earlier designs. Latimer supervised the installation of electric lighting in several major cities and later worked for Thomas Edison\'s company. In 1890 he published a book explaining incandescent lighting to the general public. His career shows how skill and persistence opened doors in a young industry.'},
+  rc_p5:{title:'How Electricity Reaches Your Home',text:'Electricity travels from power plants to homes through a network called the grid. At the power plant, generators produce electricity, which is stepped up to very high voltage for transmission. High voltage is used because it reduces the amount of energy lost as heat over long-distance lines. Transmission lines carry the power across regions to substations, where the voltage is stepped down. From substations, distribution lines carry electricity through neighborhoods. A final transformer, often mounted on a utility pole or a ground-level pad, lowers the voltage once more to the level used inside homes. The grid must balance supply and demand at every moment, because large amounts of electricity cannot easily be stored. Grid operators constantly adjust generation to match what customers are using.'},
+  rc_p6:{title:'Caring for Hand Tools',text:'Hand tools last longest when they are cleaned, inspected, and stored properly. After each use, tools should be wiped free of dirt, moisture, and grease, because trapped moisture leads to rust. Cutting tools should be kept sharp; a dull blade requires more force, which increases the chance of slipping and causing injury. Wooden handles should be checked for cracks and splinters, and any loose head should be repaired before the tool is used again. Tools should be stored in a dry place, each with its own spot, so missing tools are noticed quickly. A little maintenance after each job prevents most tool failures and keeps replacement costs down.'},
+  rc_p7:{title:'Reading a Work Order',text:'A work order is the written instruction that tells a crew what job to perform, where, and when. A complete work order lists the job location, a description of the work, the materials required, and any special safety notes. Before starting, the crew lead reads the entire order and confirms the address matches the site. Working from memory instead of the written order is a common cause of mistakes, such as installing the wrong part or performing work at the wrong unit in a large building. If any part of the order is unclear or seems incorrect, the crew is expected to contact the dispatcher before beginning, not after the work is finished. Completed orders are signed and returned, creating a record of exactly what was done.'},
+  rc_p8:{title:'Why Near-Misses Get Reported',text:'On many jobsites, workers are required to report near-misses — incidents that could have caused injury but did not. A dropped wrench that lands a foot from a coworker causes no harm, yet it reveals a hazard: unsecured tools overhead. Safety researchers have long observed that for every serious injury, there are typically many minor incidents and an even larger number of near-misses involving the same underlying causes. Because of this pattern, near-miss reports give a site the chance to fix a hazard before it produces an actual injury. Sites that treat near-miss reporting as blame-free receive far more reports, and more reports mean more hazards found and corrected. Punishing workers who report near-misses discourages reporting and hides hazards rather than removing them.'},
+  rc_p9:{title:'What a Circuit Breaker Does',text:'A circuit breaker is an automatic switch that protects an electrical circuit from damage caused by too much current. When current stays within the circuit\'s rated limit, the breaker remains closed and electricity flows normally. If a fault such as a short circuit or an overload pushes the current above the rating, the breaker senses the excess and trips, opening the circuit and stopping the flow. Unlike a fuse, which must be replaced after it operates once, a breaker can be reset after the underlying problem is fixed. Resetting a breaker without finding the cause of the trip is unsafe, because the fault that tripped it is usually still present. Repeated tripping is a signal that the circuit needs professional attention, not a bigger breaker.'},
+  rc_p10:{title:'The Morning Briefing',text:'Every shift at the Hartwell site begins with a ten-minute briefing. The foreman reviews the day\'s tasks, assigns each crew member a role, and calls out any hazards specific to that day, such as overnight rain making scaffolding slick or a delivery truck scheduled to back into the work area at noon. Crew members are expected to ask questions during the briefing rather than guess later. On Tuesday, a new apprentice named Marcus noticed his task list mentioned a scissor lift he had never operated. Instead of staying quiet, he raised it during the briefing. The foreman paired him with a certified operator for the morning and scheduled him for lift training the following week. The delay cost twenty minutes; an untrained operator on a lift could have cost far more.'},
+  rc_p11:{title:'How Apprenticeship Works',text:'An apprenticeship combines paid, on-the-job training with classroom instruction. Apprentices earn wages from their first day, and their pay rises in scheduled steps as they demonstrate new skills. A typical electrical apprenticeship lasts several years and pairs each apprentice with experienced journey-level workers on real jobsites. Classroom hours cover theory such as electrical code, mathematics, and blueprint reading, while jobsite hours turn that theory into hands-on skill. Apprentices must log a required number of both classroom and on-the-job hours to complete the program. At completion, an apprentice becomes a journey-level worker, qualified to work without direct supervision and to help train the next generation of apprentices. Unlike many career paths, apprenticeship produces no student debt, because the training is paid rather than paid for.'}
+};
+
+const RC_QUESTIONS = [
+  {id:'rc_q1',passage:'rc_p1',qtype:'main_idea',prompt:'What is the main purpose of lockout/tagout?',opts:[{l:'A',t:'To prevent equipment from starting unexpectedly during service',c:true},{l:'B',t:'To keep tools organized on a jobsite',c:false},{l:'C',t:'To record how long repairs take',c:false},{l:'D',t:'To identify which machines are oldest',c:false}],rationale:'Stated directly in the second sentence.'},
+  {id:'rc_q2',passage:'rc_p1',qtype:'detail',prompt:'According to the passage, who may remove a lock?',opts:[{l:'A',t:'Any supervisor on duty',c:false},{l:'B',t:'Only the worker who placed it',c:true},{l:'C',t:'Any electrician on the crew',c:false},{l:'D',t:"The equipment's manufacturer",c:false}],rationale:'Stated directly in the passage.'},
+  {id:'rc_q3',passage:'rc_p1',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'A tag identifies who placed the lock',c:false},{l:'B',t:'The equipment is disconnected from its energy source first',c:false},{l:'C',t:'Skipping steps to save time is acceptable',c:true},{l:'D',t:'The lock goes on the energy-isolating device',c:false}],rationale:'The passage says skipping steps is a serious violation — the opposite of acceptable.'},
+  {id:'rc_q4',passage:'rc_p1',qtype:'vocab',prompt:"In the passage, an 'energy-isolating device' is best understood as:",opts:[{l:'A',t:'A device that separates equipment from its power source',c:true},{l:'B',t:'A tool for measuring voltage',c:false},{l:'C',t:'A backup generator',c:false},{l:'D',t:'A type of protective glove',c:false}],rationale:'Context shows it is what disconnects and keeps power off.'},
+  {id:'rc_q5',passage:'rc_p2',qtype:'main_idea',prompt:'What is this passage mainly about?',opts:[{l:'A',t:'How transformers change voltage',c:true},{l:'B',t:'How to repair broken power lines',c:false},{l:'C',t:'The history of electricity',c:false},{l:'D',t:'How iron is mined for cores',c:false}],rationale:'The whole passage explains this mechanism.'},
+  {id:'rc_q6',passage:'rc_p2',qtype:'detail',prompt:'What makes a transformer a step-up transformer?',opts:[{l:'A',t:'The secondary coil has more turns than the primary',c:true},{l:'B',t:'The secondary coil has fewer turns than the primary',c:false},{l:'C',t:'The two coils are physically connected',c:false},{l:'D',t:'The core is made of copper',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q7',passage:'rc_p2',qtype:'not_true',prompt:'Which statement is NOT supported by the passage?',opts:[{l:'A',t:'The two coils share an iron core',c:false},{l:'B',t:'The two coils must be physically connected to transfer power',c:true},{l:'C',t:'Step-down transformers are used near homes',c:false},{l:'D',t:'A changing magnetic field induces current in the secondary coil',c:false}],rationale:'The passage says the opposite — the coils are not physically connected.'},
+  {id:'rc_q8',passage:'rc_p2',qtype:'vocab',prompt:"As used in the passage, 'induces' most nearly means:",opts:[{l:'A',t:'Causes to occur',c:true},{l:'B',t:'Blocks',c:false},{l:'C',t:'Measures',c:false},{l:'D',t:'Cools down',c:false}],rationale:'The field brings about, or causes, the current.'},
+  {id:'rc_q9',passage:'rc_p3',qtype:'main_idea',prompt:'Which title best fits this passage?',opts:[{l:'A',t:'PPE: The Last Line of Defense',c:true},{l:'B',t:'How Hard Hats Are Manufactured',c:false},{l:'C',t:'A History of Workplace Law',c:false},{l:'D',t:'Choosing the Right Truck for the Job',c:false}],rationale:"Captures the whole passage's focus."},
+  {id:'rc_q10',passage:'rc_p3',qtype:'detail',prompt:'According to the passage, what must employers try first, before relying on PPE?',opts:[{l:'A',t:'Eliminating or reducing hazards through design and procedures',c:true},{l:'B',t:'Buying the most expensive equipment',c:false},{l:'C',t:'Hiring more workers',c:false},{l:'D',t:'Scheduling shorter shifts',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q11',passage:'rc_p3',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Insulated gloves protect against electrical shock',c:false},{l:'B',t:'PPE works even when left in the truck',c:true},{l:'C',t:'Workers should inspect equipment before each use',c:false},{l:'D',t:'Safety glasses shield eyes from flying debris',c:false}],rationale:'The passage directly contradicts this option.'},
+  {id:'rc_q12',passage:'rc_p3',qtype:'vocab',prompt:"As used in the passage, 'consistently' most nearly means:",opts:[{l:'A',t:'Regularly, every time',c:true},{l:'B',t:'Occasionally',c:false},{l:'C',t:'Loosely',c:false},{l:'D',t:'Quickly',c:false}],rationale:'Context contrasts with the hard hat left behind — it must be worn every time.'},
+  {id:'rc_q13',passage:'rc_p4',qtype:'main_idea',prompt:'What is the main idea of the passage?',opts:[{l:'A',t:"An overview of Lewis Latimer's life and contributions",c:true},{l:'B',t:'A technical manual for carbon filaments',c:false},{l:'C',t:'The complete history of the telephone',c:false},{l:'D',t:'A description of patent law offices',c:false}],rationale:'The passage surveys his life; other options cover only fragments.'},
+  {id:'rc_q14',passage:'rc_p4',qtype:'detail',prompt:'What did Latimer patent in 1882?',opts:[{l:'A',t:'An improved process for making carbon filaments',c:true},{l:'B',t:'The telephone',c:false},{l:'C',t:'The electric generator',c:false},{l:'D',t:'A new type of patent application',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q15',passage:'rc_p4',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Latimer taught himself mechanical drawing',c:false},{l:'B',t:'Latimer invented the telephone',c:true},{l:'C',t:'Latimer published a book about incandescent lighting',c:false},{l:'D',t:"Latimer's filaments made bulbs more affordable",c:false}],rationale:"Latimer drafted Bell's patent drawings — the passage never says he invented the telephone."},
+  {id:'rc_q16',passage:'rc_p4',qtype:'vocab',prompt:"As used in the passage, a 'draftsman' is best understood as:",opts:[{l:'A',t:'A person who creates technical drawings',c:true},{l:'B',t:'A person who writes legal contracts',c:false},{l:'C',t:'A person who installs light fixtures',c:false},{l:'D',t:'A person who manages an office',c:false}],rationale:'Context ties the role to his self-taught mechanical drawing.'},
+  {id:'rc_q17',passage:'rc_p5',qtype:'main_idea',prompt:'This passage is mainly about:',opts:[{l:'A',t:'How electricity travels from power plants to homes',c:true},{l:'B',t:'How to reduce a household electric bill',c:false},{l:'C',t:'The invention of the generator',c:false},{l:'D',t:'Careers in power plant management',c:false}],rationale:'The passage traces that full path.'},
+  {id:'rc_q18',passage:'rc_p5',qtype:'detail',prompt:'Why is electricity transmitted at high voltage over long distances?',opts:[{l:'A',t:'It reduces energy lost as heat',c:true},{l:'B',t:'It makes the lines cheaper to build',c:false},{l:'C',t:'It allows electricity to be stored',c:false},{l:'D',t:'It keeps birds off the lines',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q19',passage:'rc_p5',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Large amounts of electricity are easily stored',c:true},{l:'B',t:'Substations step voltage down',c:false},{l:'C',t:'A final transformer lowers voltage near homes',c:false},{l:'D',t:'Operators adjust generation to match demand',c:false}],rationale:'The passage states the opposite.'},
+  {id:'rc_q20',passage:'rc_p5',qtype:'vocab',prompt:"As used in the passage, 'distribution lines' are best understood as:",opts:[{l:'A',t:'Lines carrying electricity through neighborhoods',c:true},{l:'B',t:'Lines connecting power plants to each other',c:false},{l:'C',t:'Underground gas pipes',c:false},{l:'D',t:'Telephone wires',c:false}],rationale:'Defined by context in the passage.'},
+  {id:'rc_q21',passage:'rc_p6',qtype:'main_idea',prompt:'The main idea of this passage is:',opts:[{l:'A',t:'Proper care makes hand tools last longer and stay safer',c:true},{l:'B',t:'Power tools are better than hand tools',c:false},{l:'C',t:'Tools should be replaced every year',c:false},{l:'D',t:'Wooden handles are outdated',c:false}],rationale:"The passage's opening thesis, developed throughout."},
+  {id:'rc_q22',passage:'rc_p6',qtype:'detail',prompt:'According to the passage, why is a dull blade dangerous?',opts:[{l:'A',t:'It requires more force, increasing the chance of slipping',c:true},{l:'B',t:'It rusts faster than a sharp blade',c:false},{l:'C',t:'It weighs more than a sharp blade',c:false},{l:'D',t:'It cannot be stored properly',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q23',passage:'rc_p6',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Trapped moisture leads to rust',c:false},{l:'B',t:'A loose tool head can wait until the job is done',c:true},{l:'C',t:'Each tool should have its own storage spot',c:false},{l:'D',t:'Maintenance keeps replacement costs down',c:false}],rationale:'The passage requires repair before use, not after.'},
+  {id:'rc_q24',passage:'rc_p6',qtype:'vocab',prompt:"As used in the passage, 'maintenance' most nearly means:",opts:[{l:'A',t:'Routine care and upkeep',c:true},{l:'B',t:'Buying new tools',c:false},{l:'C',t:'Lending tools to coworkers',c:false},{l:'D',t:'Painting tools bright colors',c:false}],rationale:'Context ties the word to cleaning, inspecting, and repair.'},
+  {id:'rc_q25',passage:'rc_p7',qtype:'main_idea',prompt:'This passage is mainly about:',opts:[{l:'A',t:'What work orders contain and why crews must follow them',c:true},{l:'B',t:'How to become a dispatcher',c:false},{l:'C',t:'The cost of building materials',c:false},{l:'D',t:'How large buildings are constructed',c:false}],rationale:'The passage explains the document and the discipline around it.'},
+  {id:'rc_q26',passage:'rc_p7',qtype:'detail',prompt:'When should a crew contact the dispatcher about an unclear order?',opts:[{l:'A',t:'Before beginning the work',c:true},{l:'B',t:'After the work is finished',c:false},{l:'C',t:'Only if a part is missing',c:false},{l:'D',t:'Never — crews decide on their own',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q27',passage:'rc_p7',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Working from memory is a reliable practice',c:true},{l:'B',t:'A complete order lists required materials',c:false},{l:'C',t:'The crew lead confirms the address matches the site',c:false},{l:'D',t:'Completed orders are signed and returned',c:false}],rationale:'The passage calls it a common cause of mistakes — not reliable.'},
+  {id:'rc_q28',passage:'rc_p7',qtype:'vocab',prompt:"As used in the passage, 'dispatcher' most nearly refers to:",opts:[{l:'A',t:'The person who assigns and clarifies work orders',c:true},{l:'B',t:"The building's owner",c:false},{l:'C',t:'A delivery driver',c:false},{l:'D',t:'A safety inspector',c:false}],rationale:"Context places the dispatcher as the source of the order's instructions."},
+  {id:'rc_q29',passage:'rc_p8',qtype:'main_idea',prompt:'The main idea of this passage is:',opts:[{l:'A',t:'Near-miss reporting helps fix hazards before injuries happen',c:true},{l:'B',t:'Dropped tools rarely cause problems',c:false},{l:'C',t:'Serious injuries cannot be predicted',c:false},{l:'D',t:'Workers should handle hazards without reporting them',c:false}],rationale:"The passage's central claim."},
+  {id:'rc_q30',passage:'rc_p8',qtype:'detail',prompt:'According to the passage, what happens when near-miss reporting is treated as blame-free?',opts:[{l:'A',t:'Sites receive far more reports',c:true},{l:'B',t:'Workers stop reporting',c:false},{l:'C',t:'Injuries increase',c:false},{l:'D',t:'Reports become less accurate',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q31',passage:'rc_p8',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Punishing reporters helps remove hazards',c:true},{l:'B',t:'A near-miss can reveal a hazard',c:false},{l:'C',t:'Serious injuries are typically outnumbered by near-misses',c:false},{l:'D',t:'More reports mean more hazards corrected',c:false}],rationale:'The passage says punishment hides hazards — the opposite of helping remove them.'},
+  {id:'rc_q32',passage:'rc_p8',qtype:'vocab',prompt:"As used in the passage, a 'near-miss' is best understood as:",opts:[{l:'A',t:'An incident that could have caused injury but did not',c:true},{l:'B',t:'An injury requiring first aid',c:false},{l:'C',t:'A missed day of work',c:false},{l:'D',t:'An inspection that finds no problems',c:false}],rationale:'Defined directly in the passage.'},
+  {id:'rc_q33',passage:'rc_p9',qtype:'main_idea',prompt:'This passage is mainly about:',opts:[{l:'A',t:'How circuit breakers protect circuits from excess current',c:true},{l:'B',t:'How to install a new electrical panel',c:false},{l:'C',t:'Why fuses are illegal',c:false},{l:'D',t:'The cost of electrical repairs',c:false}],rationale:'The passage develops exactly this.'},
+  {id:'rc_q34',passage:'rc_p9',qtype:'detail',prompt:'According to the passage, how does a breaker differ from a fuse?',opts:[{l:'A',t:'A breaker can be reset; a fuse must be replaced',c:true},{l:'B',t:'A fuse can be reset; a breaker must be replaced',c:false},{l:'C',t:'A breaker allows more current than any fuse',c:false},{l:'D',t:'There is no difference',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q35',passage:'rc_p9',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Repeated tripping should be fixed with a bigger breaker',c:true},{l:'B',t:'A breaker trips when current exceeds its rating',c:false},{l:'C',t:'Resetting without finding the cause is unsafe',c:false},{l:'D',t:'A closed breaker allows normal flow',c:false}],rationale:'The passage explicitly rejects the bigger-breaker fix.'},
+  {id:'rc_q36',passage:'rc_p9',qtype:'vocab',prompt:"As used in the passage, 'trips' most nearly means:",opts:[{l:'A',t:'Opens automatically to stop current',c:true},{l:'B',t:'Stumbles over an obstacle',c:false},{l:'C',t:'Travels to another site',c:false},{l:'D',t:'Doubles the current',c:false}],rationale:'Defined by the clause that follows it.'},
+  {id:'rc_q37',passage:'rc_p10',qtype:'main_idea',prompt:'What is the main point of this passage?',opts:[{l:'A',t:'Speaking up during briefings prevents bigger problems later',c:true},{l:'B',t:'Scissor lifts are dangerous machines',c:false},{l:'C',t:'Briefings waste twenty minutes each day',c:false},{l:'D',t:'Apprentices should work alone to learn faster',c:false}],rationale:'The Marcus story illustrates the value of asking during the briefing.'},
+  {id:'rc_q38',passage:'rc_p10',qtype:'detail',prompt:'What did the foreman do after Marcus raised his concern?',opts:[{l:'A',t:'Paired him with a certified operator and scheduled training',c:true},{l:'B',t:'Sent him home for the day',c:false},{l:'C',t:'Told him to operate the lift anyway',c:false},{l:'D',t:"Canceled the day's tasks",c:false}],rationale:'Stated directly.'},
+  {id:'rc_q39',passage:'rc_p10',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Marcus stayed quiet about the scissor lift',c:true},{l:'B',t:'Briefings cover hazards specific to that day',c:false},{l:'C',t:'The briefing lasts about ten minutes',c:false},{l:'D',t:'Crew members are expected to ask questions during the briefing',c:false}],rationale:'The passage says the opposite — he spoke up.'},
+  {id:'rc_q40',passage:'rc_p10',qtype:'vocab',prompt:"As used in the passage, 'certified' most nearly means:",opts:[{l:'A',t:'Officially qualified through training',c:true},{l:'B',t:'The oldest worker on site',c:false},{l:'C',t:'Willing to volunteer',c:false},{l:'D',t:'Paid the highest wage',c:false}],rationale:'Context contrasts the certified operator with the untrained apprentice.'},
+  {id:'rc_q41',passage:'rc_p11',qtype:'main_idea',prompt:'This passage is mainly about:',opts:[{l:'A',t:'How apprenticeship combines paid work with classroom training',c:true},{l:'B',t:'Why college is the only path to good jobs',c:false},{l:'C',t:'The history of labor unions',c:false},{l:'D',t:'How to write a resume',c:false}],rationale:'The opening sentence, developed by the whole passage.'},
+  {id:'rc_q42',passage:'rc_p11',qtype:'detail',prompt:'According to the passage, what happens when an apprentice completes the program?',opts:[{l:'A',t:'They become a journey-level worker',c:true},{l:'B',t:'They must repay their training costs',c:false},{l:'C',t:'They start classroom instruction',c:false},{l:'D',t:'They begin logging hours',c:false}],rationale:'Stated directly.'},
+  {id:'rc_q43',passage:'rc_p11',qtype:'not_true',prompt:'Which of the following is NOT true according to the passage?',opts:[{l:'A',t:'Apprentices earn wages from their first day',c:false},{l:'B',t:'Apprenticeship typically produces significant student debt',c:true},{l:'C',t:'Classroom hours cover electrical code and math',c:false},{l:'D',t:'Pay rises in scheduled steps',c:false}],rationale:'The passage states the opposite.'},
+  {id:'rc_q44',passage:'rc_p11',qtype:'vocab',prompt:"As used in the passage, 'journey-level' most nearly describes a worker who is:",opts:[{l:'A',t:'Qualified to work without direct supervision',c:true},{l:'B',t:'Required to travel between jobsites',c:false},{l:'C',t:'Still in their first year',c:false},{l:'D',t:'Working without pay',c:false}],rationale:'Defined directly in the passage.'}
+];
+
+const SECTIONS_META = {
+  ga:{ key:'ga', label:'Graphic Arithmetic', icon:'📐', questions:GA_QUESTIONS, total:22, optCount:5 },
+  mu:{ key:'mu', label:'Mathematical Usage', icon:'🔢', questions:MU_QUESTIONS, total:24, optCount:4 },
+  mc:{ key:'mc', label:'Mechanical Concepts', icon:'⚙️', questions:MC_QUESTIONS, total:60, optCount:3 },
+  rc:{ key:'rc', label:'Reading Comprehension', icon:'📖', questions:RC_QUESTIONS, total:44, optCount:4 }
+};
+</script>
+<script src="app.js"></script>
+</body>
+</html>
