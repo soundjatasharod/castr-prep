@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────
-// MC FIGURE LIBRARY — CAST-R Prep, Mechanical Concepts
+// MC FIGURE LIBRARY — Cast Test, Mechanical Concepts
 // Batch 1: Levers (q1–q5) + Pulleys (q6–q10)
 // Each entry is a standalone SVG string (viewBox 0 0 700 420),
 // keyed by question id, ready to drop into app.js.

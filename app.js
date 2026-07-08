@@ -192,7 +192,7 @@ function renderNav(active) {
   <div class="nav">
     <a class="nav-brand" data-nav="dashboard">
       ${BOLT_SVG}
-      <div><div class="nav-brand-title">Tools of the Trade</div><div class="nav-brand-sub">CAST-R PREP</div></div>
+      <div><div class="nav-brand-title">Tools of the Trade</div><div class="nav-brand-sub">Cast Test</div></div>
     </a>
     <div class="nav-links">
       <button class="nav-link${active==='dashboard'?' active':''}" data-nav="dashboard">Dashboard</button>
@@ -390,7 +390,7 @@ function renderLanding() {
   <div class="blueprint-bg" style="min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;padding:24px;">
     ${CORNER_MARK}
     <div style="width:440px;max-width:100%;text-align:center;">
-      <div class="display-title" style="font-size:58px;line-height:0.98;">CAST-R<br>Prep</div>
+      <div class="display-title" style="font-size:58px;line-height:0.98;">Cast<br>Test</div>
       <div style="font-size:16px;color:#4A5560;margin-top:14px;line-height:1.5;">Practice for the aptitude test with your crew.<br>Enter your name to jump back in.</div>
       ${localBanner() ? '<div style="margin-top:18px;text-align:left;">'+localBanner()+'</div>' : ''}
       <div style="margin-top:40px;text-align:left;background:#fff;border:1px solid #C3CCD3;padding:26px 26px 28px;box-shadow:0 12px 24px -18px rgba(35,48,58,0.4);">
@@ -510,7 +510,7 @@ function renderReturnPin() {
       <div class="pin-row" id="pin-group-return"></div>
       <button class="btn-amber" id="btn-pin-submit" style="margin-top:22px;" disabled>Sign in</button>
       <div id="pin-error" style="color:#B87333;font-size:12.5px;text-align:center;margin-top:10px;min-height:18px;"></div>
-      <div style="margin-top:8px;text-align:center;font-size:12px;color:#4A5560;">Forgot your PIN? <a href="mailto:${CONTACT_EMAIL}?subject=CAST-R%20PIN%20Reset&body=Hi%2C%20I%20forgot%20my%20PIN.%20My%20name%20is%20${encodeURIComponent(state.pendingFirst+' '+state.pendingLast)}." style="color:#B87333;font-weight:600;">Email the instructor</a></div>
+      <div style="margin-top:8px;text-align:center;font-size:12px;color:#4A5560;">Forgot your PIN? <a href="mailto:${CONTACT_EMAIL}?subject=Cast%20Test%20PIN%20Reset&body=Hi%2C%20I%20forgot%20my%20PIN.%20My%20name%20is%20${encodeURIComponent(state.pendingFirst+' '+state.pendingLast)}." style="color:#B87333;font-weight:600;">Email the instructor</a></div>
       <div style="margin-top:14px;text-align:center;"><button class="btn-outline" data-nav="landing" style="padding:9px 18px;font-size:12px;">← Not you?</button></div>
     </div>
   </div>`;
@@ -641,7 +641,7 @@ function renderSettings() {
         <div style="background:#fff;border:1px solid #C3CCD3;border-top:4px solid #0A3D62;padding:20px 22px;">
           <div class="oswald" style="display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:0.08em;font-size:13px;color:#4A5560;">ⓘ Having a problem with your account?</div>
           <div style="font-size:12px;color:#4A5560;margin-top:8px;line-height:1.5;">Forgot your PIN, picked the wrong crew, or locked out? Email the instructor directly — account fixes are handled over email, since the app can't verify who you are.</div>
-          <a href="mailto:${CONTACT_EMAIL}?subject=CAST-R%20Account%20Help" style="margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;background:#0A3D62;color:#fff;font-family:Oswald,sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;font-size:13px;padding:12px;text-decoration:none;">✉ Email the instructor</a>
+          <a href="mailto:${CONTACT_EMAIL}?subject=Cast%20Test%20Account%20Help" style="margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;background:#0A3D62;color:#fff;font-family:Oswald,sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;font-size:13px;padding:12px;text-decoration:none;">✉ Email the instructor</a>
         </div>
       </div>
       <div style="background:#fff;border:1px solid #C3CCD3;padding:22px 24px;">
@@ -1053,7 +1053,7 @@ function consoleNav() {
     <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap;">
       <div style="display:flex;align-items:center;gap:11px;">
         ${BOLT_SVG_CONSOLE}
-        <div><div class="oswald" style="font-weight:600;text-transform:uppercase;letter-spacing:0.05em;font-size:13px;color:#F4F6F8;line-height:1;">Admin Console</div><div class="mono" style="font-size:9px;letter-spacing:0.16em;color:rgba(244,246,248,0.55);margin-top:2px;">CAST-R PREP · INSTRUCTOR</div></div>
+        <div><div class="oswald" style="font-weight:600;text-transform:uppercase;letter-spacing:0.05em;font-size:13px;color:#F4F6F8;line-height:1;">Admin Console</div><div class="mono" style="font-size:9px;letter-spacing:0.16em;color:rgba(244,246,248,0.55);margin-top:2px;">Cast Test · INSTRUCTOR</div></div>
       </div>
       <div class="console-tabs">
         <button class="console-tab${state.adminTab==='roster'?' active':''}" data-tab="roster">Roster</button>
