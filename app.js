@@ -703,13 +703,17 @@ function questionShell(rightHtml) {
 
   const eyebrowTxt = state.sessionSection === 'ga' && q.drawing
     ? 'DRAWING · ' + q.drawing.replace(/_/g,' ').toUpperCase()
-    : state.sessionSection === 'rc' && q.passage
-      ? 'PASSAGE · ' + (RC_PASSAGES[q.passage]?.title || '').toUpperCase()
-      : sec.label.toUpperCase();
+    : state.sessionSection === 'mc' && window.MC_DIAGRAMS && window.MC_DIAGRAMS[q.id]
+      ? 'FIGURE · ' + (q.concept || '').replace(/_/g,' ').toUpperCase()
+      : state.sessionSection === 'rc' && q.passage
+        ? 'PASSAGE · ' + (RC_PASSAGES[q.passage]?.title || '').toUpperCase()
+        : sec.label.toUpperCase();
 
   let media = '';
   if (state.sessionSection === 'ga' && q.drawing) {
     media = `<div class="drawing-box">${renderDrawing(q)}<div class="fig-caption">FIG. 1 — TOP-DOWN VIEW</div></div>`;
+  } else if (state.sessionSection === 'mc' && window.MC_DIAGRAMS && window.MC_DIAGRAMS[q.id]) {
+    media = `<div class="drawing-box">${window.MC_DIAGRAMS[q.id]}<div class="fig-caption">FIG. 1 — NOT TO SCALE · REASON FROM THE SETUP SHOWN</div></div>`;
   } else if (state.sessionSection === 'rc' && q.passage) {
     const psg = RC_PASSAGES[q.passage];
     media = `<div class="rc-passage"><h4>${escHtml(psg.title)}</h4>${escHtml(psg.text)}</div>`;
