@@ -550,7 +550,7 @@ async function renderDashboard() {
   const week = currentWeek();
   const allProfiles = await DB.getAllProfiles();
   const scores = computeCrewScores(allProfiles, week).sort((a,b)=>(b.score??-1)-(a.score??-1));
-  const optLabel = { ga:'5 OPTIONS · A–E', mu:'4 OPTIONS · A–D', mc:'3 OPTIONS · A–C', rc:'4 OPTIONS · A–D' };
+  const optLabel = { ga:'5 OPTIONS · A–E', mu:'5 OPTIONS · A–E', mc:'3 OPTIONS · A–C', rc:'4 OPTIONS · A–D' };
 
   const cards = Object.values(SECTIONS_META).map(s => {
     const st = sectionStats(p, s.key);
@@ -744,7 +744,12 @@ function renderQuestion() {
 
   return questionShell(`
     <div class="oswald" style="text-transform:uppercase;letter-spacing:0.1em;font-size:12px;color:#4A5560;">Select one answer</div>
-    <div style="font-size:12px;color:#4A5560;margin-top:4px;margin-bottom:18px;">Calculators allowed — take your time.</div>
+    <div style="font-size:12px;color:#4A5560;margin-top:4px;margin-bottom:18px;">${{
+      ga:'Work from the labeled dimensions — the drawing is not to scale.',
+      mu:'No calculator on the real test — build your speed.',
+      mc:'No math needed — reason it out.',
+      rc:'Every answer comes from the passage alone.'
+    }[state.sessionSection]}</div>
     <div style="display:flex;flex-direction:column;gap:12px;flex:1;">${opts}</div>
     <button class="btn-amber" id="btn-submit-answer" data-action="submit-answer" style="margin-top:18px;padding:15px;" ${state.sessionAnswered?'':'disabled'}>Submit answer</button>
     <div id="submit-hint" style="text-align:center;font-size:11px;color:#4A5560;margin-top:8px;">Select an option to continue</div>
