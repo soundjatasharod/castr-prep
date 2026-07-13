@@ -362,6 +362,10 @@ async function handleAction(action, data) {
   }
   if (action === 'back-to-admin') { state.adminPractice = false; navigate('admin'); return; }
   if (action === 'admin-practice') { state.adminPractice = true; navigate('dashboard'); return; }
+  if (action === 'clear-admin-practice') {
+    await DB.setProfile(ADMIN_KEY, { firstName:'Soundjata', lastName:'Sharod', crew:'Instructor', pin:ADMIN_PIN, answers:{} });
+    render(); return;
+  }
   if (action === 'admin-delete-flag') { await DB.deleteFlag(data.flagid); render(); return; }
   if (action === 'export-csv') { await exportCSV(); return; }
   if (action === 'admin-save-edit') {
@@ -1062,6 +1066,7 @@ function consoleNav() {
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
       <button class="practice-btn" data-action="admin-practice">Practice as student <span style="font-size:14px;">↗</span></button>
+      <button class="practice-btn" data-action="clear-admin-practice" style="background:#B87333;">Clear practice data</button>
       <div style="width:1px;height:24px;background:rgba(244,246,248,0.2);"></div>
       <div style="display:flex;align-items:center;gap:8px;background:rgba(244,246,248,0.1);padding:6px 12px;border-radius:4px;"><span style="width:9px;height:9px;background:#F2A900;border-radius:50%;"></span><span style="font-size:12px;color:#F4F6F8;font-weight:500;">${escHtml(state.profile.firstName+' '+state.profile.lastName)}</span></div>
       <button class="console-tab" data-action="logout" style="font-size:12px;">Sign out</button>
